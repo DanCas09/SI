@@ -1,0 +1,511 @@
+-------------------------------------------
+-- Tests funcoesJogador criarJogador (d) --
+-------------------------------------------
+CREATE OR REPLACE PROCEDURE dbo.test_funcoesJogador_criarJogador(
+	emailJ VARCHAR(255),
+	usernameJ VARCHAR(255),
+	estadoJ VARCHAR(10),
+	regiaoJ VARCHAR(255)
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+	invalid_parameters BOOLEAN = FALSE;
+	successful_test BOOLEAN;
+BEGIN	
+	BEGIN
+		-- Chama o procedimento armazenado
+    	CALL dbo.criarJogador(emailJ, usernameJ, estadoJ, regiaoJ);
+    EXCEPTION
+		-- Verifica se houve algum problema com os parametros passados
+		WHEN invalid_parameter_value THEN
+            invalid_parameters := TRUE;	
+    END;
+	
+	-- Verifica se o Jogador foi corretamente adicionado
+     IF EXISTS (SELECT 1 FROM dbo.Jogador WHERE email = emailJ) AND NOT invalid_parameters THEN
+	  successful_test:= TRUE;
+      RAISE NOTICE 'Teste (d): criarJogador: Resultado OK';
+    ELSE
+      IF invalid_parameters THEN
+	  RAISE NOTICE 'Teste (d): email ou username passados como parametro invalidos: Resultado FAIL';
+	  ELSE
+      RAISE NOTICE 'Teste (d): criarJogador: Resultado FAIL';
+	  END IF;
+    END IF;
+	
+	-- Remove o registro na tabela de jogador, caso exista
+	IF successful_test THEN
+	 DELETE FROM dbo.Jogador
+	 WHERE email = emailJ;
+	END IF;
+END;
+$$;
+
+CALL dbo.test_funcoesJogador_criarJogador('jogador8@gmail.com', 'jogador4', 'Inativo', 'Baasdadhia');
+
+
+-----------------------------------------------
+-- Tests funcoesJogador desativarJogador (d) --
+-----------------------------------------------
+CREATE OR REPLACE PROCEDURE dbo.test_funcoesJogador_desativarJogador(
+	idJ Integer
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    estadoJ VARCHAR(10);
+	invalid_parameters BOOLEAN;
+BEGIN
+    -- Guarda o estado do jogador a ser alterado
+	SELECT estado INTO estadoJ
+	  FROM dbo.Jogador
+	  WHERE id = idJ;
+	
+	BEGIN
+		-- Chama o procedimento armazenado
+    	CALL dbo.desativarJogador(idj);
+	EXCEPTION
+		-- Verifica se houve algum problema com os parametros passados
+		WHEN invalid_parameter_value THEN
+            invalid_parameters := TRUE;	
+    END;
+    
+	-- Verifica se o estado foi corretamente alterado para 'Inativo'
+    IF 'Inativo' = (SELECT estado FROM dbo.Jogador WHERE id = idJ) THEN
+      RAISE NOTICE 'Teste (d): desativarJogador: Resultado OK';
+    ELSE
+	  IF invalid_parameters THEN
+	  RAISE NOTICE 'Teste (d): userId passado como parametro é invalido: Resultado FAIL';
+	  ELSE
+      RAISE NOTICE 'Teste (d): desativarJogador: Resultado FAIL';
+	  END IF;
+    END IF;
+	
+	--Altera o estado do jogador para o inicial
+	UPDATE dbo.Jogador
+	SET estado = estadoJ
+	WHERE id = idJ;
+END;
+$$;
+
+CALL dbo.test_funcoesJogador_desativarJogador(3);
+
+
+
+-------------------------------------------
+-- Tests funcoesJogador banirJogador (d) --
+-------------------------------------------
+CREATE OR REPLACE PROCEDURE dbo.test_funcoesJogador_banirJogador(
+	idJ Integer
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    estadoJ VARCHAR(10);
+	invalid_parameters BOOLEAN;
+BEGIN
+
+	-- Guarda o estado do jogador a ser alterado
+	SELECT estado INTO estadoJ
+	  FROM dbo.Jogador
+	  WHERE id = idJ;
+	  	
+    BEGIN
+		-- Chama o procedimento armazenado
+    	CALL dbo.banirJogador(idj);
+	EXCEPTION
+		-- Verifica se houve algum problema com os parametros passados
+		WHEN invalid_parameter_value THEN
+            invalid_parameters := TRUE;	
+    END;
+    
+	-- Verifica se o estado foi corretamente alterado para 'Banido'
+    IF 'Banido' = (SELECT estado FROM dbo.Jogador WHERE id = idJ) THEN
+      RAISE NOTICE 'Teste (d): banirJogador: Resultado OK';
+    ELSE
+       IF invalid_parameters THEN
+	  RAISE NOTICE 'Teste (d): userId passado como parametro é invalido: Resultado FAIL';
+	  ELSE
+      RAISE NOTICE 'Teste (d): banirJogador: Resultado FAIL';
+	  END IF;
+    END IF;
+	
+	-- Altera o estado do jogador para o inicial
+	UPDATE dbo.Jogador
+	SET estado = estadoJ
+	WHERE id = idJ;
+END;
+$$;
+
+CALL dbo.test_funcoesJogador_banirJogador(3);
+
+
+---------------------------------
+-- Test totalPontosJogador (e) --
+---------------------------------
+CREATE OR REPLACE PROCEDURE dbo.test_total_pontos_jogador()
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    total_pontos_jogador INTEGER;
+BEGIN
+	-- Chama a funcao totalPontosJogador e guarda o retorno numa variavel
+    SELECT dbo.totalPontosJogador(1) INTO total_pontos_jogador;
+	
+    -- Verifica se o total de pontos é o esperado
+    IF total_pontos_jogador = (SELECT total_pontos FROM dbo.Estatisticas_jogador WHERE id_jogador = 1) THEN
+        RAISE NOTICE 'Teste (e): totalPontosJogador: Resultado OK';
+    ELSE
+        RAISE NOTICE 'Teste (e): totalPontosJogador: Resultado FAIL';
+    END IF;
+END;
+$$;
+
+CALL dbo.test_total_pontos_jogador();
+
+
+------------------------------
+-- Test associar_cracha (h) --
+------------------------------
+CREATE OR REPLACE PROCEDURE dbo.test_associar_cracha(
+	id_jogador_param INTEGER,
+	id_jogo_param VARCHAR(10),
+	nome_cracha_param VARCHAR(255)
+) 
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    id_cracha_param INTEGER;
+    pontuacao_jogador INTEGER;
+    pontuacao_cracha INTEGER;
+BEGIN
+    -- Obtém o ID do crachá com base no nome e no jogo
+    SELECT c.id INTO id_cracha_param
+    FROM dbo.Cracha c
+    WHERE c.nome = nome_cracha_param AND c.id_jogo = id_jogo_param;
+
+    -- Obtém a pontuação necessária para obter o crachá
+    SELECT c.pontuacao INTO pontuacao_cracha
+    FROM dbo.Cracha c
+    WHERE c.id = id_cracha_param;
+
+    -- Obtém a pontuação do jogador no jogo em questão
+    SELECT p.total_pontos INTO pontuacao_jogador
+    FROM dbo.PontosJogoPorJogador(id_jogo_param) p
+    WHERE p.id_jogador = id_jogador_param;
+
+    -- Remove o registro na tabela de associação, caso exista
+    DELETE FROM dbo.Crachas_jogador  
+    WHERE id_jogador = id_jogador_param AND id_cracha = id_cracha_param;
+
+    -- Chama a procedure associarCracha
+    CALL dbo.associarCracha(id_jogador_param, id_jogo_param, nome_cracha_param);
+
+    -- Verifica se o crachá foi associado corretamente
+    IF NOT EXISTS (
+        SELECT 1
+        FROM dbo.Crachas_jogador cj
+        WHERE cj.id_jogador = id_jogador_param AND cj.id_cracha = id_cracha_param
+    ) THEN
+        RAISE NOTICE 'Teste (h): associarCracha: Resultado FAIL';
+    ELSE
+        RAISE NOTICE 'Teste (h): associarCracha: Resultado OK';
+    END IF;
+END;
+$$;
+
+-- Chama o procedimento test_associar_cracha 
+CALL dbo.test_associar_cracha(1, 'jg1', 'Fantasma Branco');
+
+------------------------------
+-- Test iniciarConversa (i) --
+------------------------------
+
+CREATE OR REPLACE PROCEDURE dbo.test_iniciar_conversa() 
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    id_conversa_param INTEGER;
+	id_jogador_param INTEGER;
+BEGIN
+	-- Insere um jogador teste
+	INSERT INTO dbo.Jogador (email, username, estado, regiao)
+	VALUES 
+	('testfunction@example.com', 'testfunction', 'Ativo', 'North America');
+	
+	-- Obtem o id do jogador criado para efeito de teste
+	SELECT dbo.Jogador.id FROM dbo.Jogador INTO id_jogador_param
+	WHERE email = 'testfunction@example.com'
+	AND username = 'testfunction';
+
+	-- Remove o registo na tabela mnsagem caso exista
+    DELETE FROM dbo.Mensagem  
+    WHERE id_jogador = id_jogador_param AND id_conversa = id_conversa_param 
+	AND texto_mensagem = 'Conversa iniciada por testfunction';
+	
+	-- Remove o registo na tabela cnversa_jgador caso exista
+	DELETE FROM dbo.Conversa_Jogador
+	WHERE id_jogador = id_jogador_param
+	AND id_conversa = id_conversa_param;
+	
+	-- reove o registo na tabela cnversa caso exista
+	DELETE FROM dbo.Conversa
+	WHERE dbo.Conversa.id = id_conversa_param;
+	
+    -- Chama o procedimento iniciado de forma a inciar uma conversa
+    CALL dbo.iniciarConversa(id_jogador_param, 'Conversa iniciada', id_conversa_param);
+
+    -- Verifica se a conversa foi criada
+    IF NOT EXISTS (
+        SELECT 1 FROM dbo.Conversa WHERE id = id_conversa_param
+    ) THEN
+        RAISE NOTICE 'Teste (i): iniciarConversa: Resultado FAIL';
+    END IF;
+
+    -- Verifica se o jogador foi associado á conversa
+    IF NOT EXISTS (
+        SELECT 1 FROM dbo.Conversa_jogador WHERE id_conversa = id_conversa_param AND id_jogador = id_jogador_param
+    ) THEN
+        RAISE NOTICE 'Teste (i): iniciarConversa: Resultado FAIL';
+    END IF;
+
+    -- Verifica se a mensagem foi criada
+    IF NOT EXISTS (
+        SELECT 1 FROM dbo.Mensagem WHERE id_conversa = id_conversa_param AND id_jogador = id_jogador_param
+    ) THEN
+        RAISE NOTICE 'Teste (i): iniciarConversa: Resultado FAIL';
+    END IF;
+
+    RAISE NOTICE 'Teste (i): iniciarConversa: Resultado OK';
+	
+	-- Remove o registo na tabela mnsagem caso exista
+    DELETE FROM dbo.Mensagem  
+    WHERE id_jogador = id_jogador_param AND id_conversa = id_conversa_param 
+	AND texto_mensagem = 'Conversa iniciada por testfunction';
+	
+	-- Remove  registo na tabela conversa_jogador caso exista
+	DELETE FROM dbo.Conversa_Jogador
+	WHERE id_jogador = id_jogador_param
+	AND id_conversa = id_conversa_param;
+	
+	-- Remove o registo na tabela conversa caso exista
+	DELETE FROM dbo.Conversa
+	WHERE dbo.Conversa.id = id_conversa_param;
+	
+	-- Remove o registo na tabela jogador caso exista
+	DELETE FROM dbo.Jogador 
+	WHERE email = 'testfunction@example.com' AND username = 'testfunction';
+END;
+$$;
+
+CALL dbo.test_iniciar_conversa();
+
+
+------------------------------
+-- Test juntarConversa (j) --
+------------------------------
+
+CREATE OR REPLACE PROCEDURE dbo.test_juntar_conversa(
+	id_jogador_param INTEGER,
+	id_conversa_param INTEGER
+) 
+LANGUAGE plpgsql
+AS $$
+BEGIN
+
+	-- Chama o procedimento armazenado	
+	CALL dbo.juntarConversa(id_jogador_param, id_conversa_param);
+	
+	-- Verifica se a conversa foi corretamente associada com o jogador
+     IF EXISTS (SELECT 1 FROM dbo.conversa_jogador WHERE id_jogador = id_jogador_param AND id_conversa = id_conversa_param) THEN
+      RAISE NOTICE 'Teste (j): JuntarConversa: Resultado OK';
+    ELSE
+      RAISE NOTICE 'Teste (j): juntarConversa: Resultado FAIL';
+    END IF;
+
+	-- Remove o registo na tabela conversa_jogador caso exista
+	DELETE FROM dbo.Conversa_Jogador
+	WHERE id_jogador = id_jogador_param
+	AND id_conversa = id_conversa_param;
+END;
+$$;
+
+CALL dbo.test_juntar_conversa(2, 2);
+
+------------------------------
+-- Test jogadorTotalInfo (l) --
+------------------------------
+
+CREATE OR REPLACE PROCEDURE dbo.test_jogador_total_info()
+AS $$
+DECLARE
+    id_jogador_var INTEGER;
+	id_partida1_var INTEGER;
+	id_partida2_var INTEGER;
+	id_partida3_var INTEGER;
+	teste_jogador_id INTEGER;
+	teste_num_partidas INTEGER;
+	teste_num_jogos INTEGER;
+	teste_pontuacao INTEGER;
+	teste_estado VARCHAR(10);
+	teste_email VARCHAR(255);
+	teste_username VARCHAR(255);
+	
+BEGIN
+    -- Insere um jogador teste
+    INSERT INTO dbo.Jogador (email, username, estado, regiao) VALUES ('test@gmail.com', 'testPlayer', 'Ativo', 'Bahia') RETURNING id INTO id_jogador_var;
+
+    -- Insere um jogo teste
+	INSERT INTO dbo.Jogo (id, nome, url) VALUES ('jogoTst', 'JogoTeste', 'http://www.jogoteste.com');
+   
+    -- Insere as partidas em que o jogador teste participou
+    INSERT INTO dbo.Partida (id_jogo, data_ini, data_fim, regiao) VALUES ('jogoTst', '2022-01-01 13:00:00', '2022-01-01 14:00:00', 'Bahia') RETURNING id INTO id_partida1_var;
+	INSERT INTO dbo.Partida (id_jogo, data_ini, data_fim, regiao) VALUES ('jogoTst', '2023-04-05 15:20:00', '2023-04-05 16:00:00', 'Bahia') RETURNING id INTO id_partida2_var;
+	INSERT INTO dbo.Partida (id_jogo, data_ini, data_fim, regiao) VALUES ('jogoTst', '2022-05-05 20:20:00', '2022-05-06 21:00:00', 'Bahia') RETURNING id INTO id_partida3_var;
+	
+
+    -- Insere as pontuações que o jogador teste obteve
+    INSERT INTO dbo.Pontuacao (id_partida, id_jogador, pontuacao) VALUES (id_partida1_var, id_jogador_var, 200);
+	INSERT INTO dbo.Pontuacao (id_partida, id_jogador, pontuacao) VALUES (id_partida2_var, id_jogador_var, 100);
+	INSERT INTO dbo.Pontuacao (id_partida, id_jogador, pontuacao) VALUES (id_partida3_var, id_jogador_var, 200);
+	 
+	-- Insere as compras de jogos efetuadas pelo jogador teste
+    INSERT INTO dbo.Compra (id_jogador, id_jogo, preco, data_compra) VALUES (id_jogador_var, 'jogoTst', 19.99, '2023-03-04 12:00:00');
+    INSERT INTO dbo.Compra (id_jogador, id_jogo, preco, data_compra) VALUES (id_jogador_var, 'jogoTst', 10.99, '2020-05-11 13:30:00');
+    INSERT INTO dbo.Compra (id_jogador, id_jogo, preco, data_compra) VALUES (id_jogador_var, 'jogoTst', 19.99, '2021-11-01 10:40:00');
+    INSERT INTO dbo.Compra (id_jogador, id_jogo, preco, data_compra) VALUES (id_jogador_var, 'jogoTst', 10.99, '2022-01-04 21:00:00');
+
+
+    -- Executa a vista e guarda as variaveis necessarias
+    SELECT id, num_partidas, num_jogos, pontuacao, estado, email, username INTO teste_jogador_id, teste_num_partidas, teste_num_jogos, teste_pontuacao, teste_estado, teste_email, teste_username 
+	FROM dbo.jogadorTotalInfo WHERE id = id_jogador_var;
+
+    -- Verifica os resultados
+    IF  id_jogador_var = teste_jogador_id AND teste_estado = 'Ativo' AND teste_email = 'test@gmail.com' AND teste_username = 'testPlayer' AND  teste_num_partidas = 3 AND teste_num_jogos = 4 AND teste_pontuacao = 500 THEN
+        RAISE NOTICE 'Teste (l): jogadorTotalInfo: Resultado OK';
+    ELSE
+        RAISE NOTICE 'Teste (l): jogadorTotalInfo: Resultado FAIL';
+    END IF;
+	
+	-- Apaga os dados inseridos no teste
+	DELETE FROM dbo.Jogador j WHERE j.id = id_jogador_var;
+	DELETE FROM dbo.Compra c  WHERE c.id_jogador = id_jogador_var;
+	DELETE FROM dbo.Pontuacao p WHERE p.id_jogador = id_jogador_var;
+	DELETE FROM dbo.Partida p WHERE p.id_jogo = 'jogoTst';
+	DELETE FROM dbo.Jogo j WHERE j.id = 'jogoTst';
+END;
+$$ LANGUAGE plpgsql;
+
+CALL dbo.test_jogador_total_info();
+
+
+--------------------------------------
+-- Test trigger_associar_cracha (m) --
+--------------------------------------
+
+CREATE OR REPLACE PROCEDURE dbo.test_atribuir_crachas_trigger() 
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    id_partida_param INTEGER;
+	id_partidaMJ_param INTEGER;
+    id_jogador_param INTEGER;
+    id_cracha_param INTEGER;
+BEGIN
+	-- Insere um jogador teste
+	INSERT INTO dbo.Jogador (email, username, estado, regiao) VALUES
+    ('test@gmail.com', 'test', 'Ativo', 'Lisboa') RETURNING id INTO id_jogador_param;
+
+	-- Insere uma partida teste
+	INSERT INTO dbo.Partida (id_jogo, data_ini, data_fim, regiao) VALUES
+    ('jg1', '2022-01-01 13:00:00', NULL, 'Lisboa') RETURNING id INTO id_partida_param;
+
+    -- Insere uma pontuacao teste
+    INSERT INTO dbo.Pontuacao (id_jogador, id_partida, pontuacao) 
+    VALUES (id_jogador_param, id_partida_param, 500);
+	
+	-- Insere uma partida_multijogador teste
+	INSERT INTO dbo.Partida_multijogador (id_partida, estado) VALUES
+    (id_partida_param, 'Em curso') RETURNING id_partida INTO id_partidaMJ_param;
+	
+    -- Realiza um update na tabela partida_multijogador 
+	UPDATE dbo.Partida_multijogador
+	SET estado = 'Terminada'
+	WHERE id_partida = id_partidaMJ_param AND estado = 'Em curso';
+
+    -- Verifica se o cracha foi associado ao jogador
+    IF NOT EXISTS (
+        SELECT 1 FROM dbo.Crachas_Jogador WHERE id_jogador = id_jogador_param
+    ) THEN
+        RAISE NOTICE 'Teste (m): atribuir_crachas_trigger: Resultado FAIL';
+		ELSE RAISE NOTICE 'Teste (m): atribuir_crachas_trigger: Resultado OK';
+    END IF;
+
+    -- Apaga as inserções realizadas para efeitos de teste
+    DELETE FROM dbo.Crachas_Jogador WHERE id_jogador = id_jogador_param;
+	DELETE FROM dbo.Partida_multijogador mj WHERE mj.id_partida = id_partidaMJ_param;
+    DELETE FROM dbo.Partida p WHERE p.id = id_partida_param;
+    DELETE FROM dbo.Pontuacao WHERE id_jogador = id_jogador_param AND id_partida = id_partida_param;
+	DELETE FROM dbo.Jogador j WHERE j.id = id_jogador_param;
+END;
+$$;
+
+CALL dbo.test_atribuir_crachas_trigger();
+
+--------------------------------------
+-- Test update_estado_trigger (n) --
+--------------------------------------
+
+CREATE OR REPLACE PROCEDURE dbo.test_update_estado_trigger() 
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    id_jogador_var INTEGER;
+	id_partida1_var INTEGER;
+	id_partida2_var INTEGER;
+	id_partida3_var INTEGER;
+BEGIN
+	 -- Insere um jogador teste
+    INSERT INTO dbo.Jogador (email, username, estado, regiao) VALUES ('test@gmail.com', 'testPlayer', 'Ativo', 'Bahia') RETURNING id INTO id_jogador_var;
+
+    -- Insere um jogo teste
+	INSERT INTO dbo.Jogo (id, nome, url) VALUES ('jogoTst', 'JogoTeste', 'http://www.jogoteste.com');
+   
+    -- Insere as partidas em que o jogador teste participou
+    INSERT INTO dbo.Partida (id_jogo, data_ini, data_fim, regiao) VALUES ('jogoTst', '2022-01-01 13:00:00', '2022-01-01 14:00:00', 'Bahia') RETURNING id INTO id_partida1_var;
+	INSERT INTO dbo.Partida (id_jogo, data_ini, data_fim, regiao) VALUES ('jogoTst', '2023-04-05 15:20:00', '2023-04-05 16:00:00', 'Bahia') RETURNING id INTO id_partida2_var;
+	INSERT INTO dbo.Partida (id_jogo, data_ini, data_fim, regiao) VALUES ('jogoTst', '2022-05-05 20:20:00', '2022-05-06 21:00:00', 'Bahia') RETURNING id INTO id_partida3_var;
+	
+
+    -- Insere as pontuações que o jogador teste obteve
+    INSERT INTO dbo.Pontuacao (id_partida, id_jogador, pontuacao) VALUES (id_partida1_var, id_jogador_var, 200);
+	INSERT INTO dbo.Pontuacao (id_partida, id_jogador, pontuacao) VALUES (id_partida2_var, id_jogador_var, 100);
+	INSERT INTO dbo.Pontuacao (id_partida, id_jogador, pontuacao) VALUES (id_partida3_var, id_jogador_var, 200);
+	 
+	-- Insere as compras de jogos efetuadas pelo jogador teste
+    INSERT INTO dbo.Compra (id_jogador, id_jogo, preco, data_compra) VALUES (id_jogador_var, 'jogoTst', 19.99, '2023-03-04 12:00:00');
+    INSERT INTO dbo.Compra (id_jogador, id_jogo, preco, data_compra) VALUES (id_jogador_var, 'jogoTst', 10.99, '2020-05-11 13:30:00');
+    INSERT INTO dbo.Compra (id_jogador, id_jogo, preco, data_compra) VALUES (id_jogador_var, 'jogoTst', 19.99, '2021-11-01 10:40:00');
+    INSERT INTO dbo.Compra (id_jogador, id_jogo, preco, data_compra) VALUES (id_jogador_var, 'jogoTst', 10.99, '2022-01-04 21:00:00');
+
+
+    -- Executa a vista e guarda as variaveis necessarias
+    DELETE FROM dbo.jogadortotalinfo where id = id_jogador_var ;
+	IF 'Banido' = (SELECT estado FROM dbo.Jogador WHERE id = id_jogador_var) THEN
+      RAISE NOTICE 'Teste (n): update_estado_trigger: Resultado OK';
+    ELSE
+      RAISE NOTICE 'Teste (n): update_estado_trigger: Resultado FAIL';
+    END IF;
+	
+	-- Apaga os dados inseridos no teste
+	DELETE FROM dbo.Jogador j WHERE j.id = id_jogador_var;
+	DELETE FROM dbo.Compra c  WHERE c.id_jogador = id_jogador_var;
+	DELETE FROM dbo.Pontuacao p WHERE p.id_jogador = id_jogador_var;
+	DELETE FROM dbo.Partida p WHERE p.id_jogo = 'jogoTst';
+	DELETE FROM dbo.Jogo j WHERE j.id = 'jogoTst';
+
+END;
+$$;
+
+CALL dbo.test_update_estado_trigger();
