@@ -72,4 +72,3 @@ BEGIN
 END;
 $$;
 
-CALL dbo.associarCracha(1, 'jg1', 'Fantasma Branco');

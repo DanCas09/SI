@@ -27,5 +27,4 @@ BEGIN
 END;
 $$;
 
--- Call the function with a sample player ID
-SELECT dbo.totalJogosJogador(3); -- replace 1 with the identifier of a player
+

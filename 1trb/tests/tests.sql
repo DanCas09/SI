@@ -305,29 +305,51 @@ CALL dbo.test_iniciar_conversa();
 ------------------------------
 -- Test juntarConversa (j) --
 ------------------------------
-
 CREATE OR REPLACE PROCEDURE dbo.test_juntar_conversa(
 	id_jogador_param INTEGER,
 	id_conversa_param INTEGER
 ) 
 LANGUAGE plpgsql
 AS $$
+DECLARE
+	invalid_parameters BOOLEAN = FALSE;
+	unique_violation BOOLEAN = FALSE;
+	successful_test BOOLEAN;
 BEGIN
-
+	
 	-- Chama o procedimento armazenado	
-	CALL dbo.juntarConversa(id_jogador_param, id_conversa_param);
+	BEGIN
+		CALL dbo.juntarConversa(id_jogador_param, id_conversa_param);
+	EXCEPTION
+		-- Verifica se houve algum problema com os parametros passados
+		WHEN invalid_parameter_value THEN
+			invalid_parameters := TRUE;
+		WHEN unique_violation THEN
+			unique_violation:= TRUE;		
+	END;
 	
 	-- Verifica se a conversa foi corretamente associada com o jogador
-     IF EXISTS (SELECT 1 FROM dbo.conversa_jogador WHERE id_jogador = id_jogador_param AND id_conversa = id_conversa_param) THEN
-      RAISE NOTICE 'Teste (j): JuntarConversa: Resultado OK';
-    ELSE
-      RAISE NOTICE 'Teste (j): juntarConversa: Resultado FAIL';
-    END IF;
-
+	IF EXISTS (SELECT 1 FROM dbo.conversa_jogador WHERE id_jogador = id_jogador_param AND id_conversa = id_conversa_param)
+		AND NOT invalid_parameters AND NOT unique_violation THEN
+		successful_test:= TRUE;
+		RAISE NOTICE 'Teste (j): JuntarConversa: Resultado OK';
+	ELSE
+		IF invalid_parameters THEN
+			RAISE NOTICE 'Teste (j): id_conversa ou id_jogador passados como parametro invalidos: Resultado FAIL';
+		ELSEIF unique_violation THEN
+			RAISE NOTICE 'Teste (j): conversa ja previamente associada a jogador: Resultado FAIL';
+		ELSE
+			RAISE NOTICE 'Teste (j): juntarConversa: Resultado FAIL';
+		END IF;
+	END IF;
+	
 	-- Remove o registo na tabela conversa_jogador caso exista
-	DELETE FROM dbo.Conversa_Jogador
-	WHERE id_jogador = id_jogador_param
-	AND id_conversa = id_conversa_param;
+	IF successful_test THEN
+	 DELETE FROM dbo.Conversa_Jogador
+	 WHERE id_jogador = id_jogador_param
+	 AND id_conversa = id_conversa_param;
+	END IF; 
+	
 END;
 $$;
 
@@ -341,9 +363,6 @@ CREATE OR REPLACE PROCEDURE dbo.test_jogador_total_info()
 AS $$
 DECLARE
     id_jogador_var INTEGER;
-	id_partida1_var INTEGER;
-	id_partida2_var INTEGER;
-	id_partida3_var INTEGER;
 	teste_jogador_id INTEGER;
 	teste_num_partidas INTEGER;
 	teste_num_jogos INTEGER;
@@ -353,29 +372,13 @@ DECLARE
 	teste_username VARCHAR(255);
 	
 BEGIN
-    -- Insere um jogador teste
-    INSERT INTO dbo.Jogador (email, username, estado, regiao) VALUES ('test@gmail.com', 'testPlayer', 'Ativo', 'Bahia') RETURNING id INTO id_jogador_var;
-
-    -- Insere um jogo teste
-	INSERT INTO dbo.Jogo (id, nome, url) VALUES ('jogoTst', 'JogoTeste', 'http://www.jogoteste.com');
-   
-    -- Insere as partidas em que o jogador teste participou
-    INSERT INTO dbo.Partida (id_jogo, data_ini, data_fim, regiao) VALUES ('jogoTst', '2022-01-01 13:00:00', '2022-01-01 14:00:00', 'Bahia') RETURNING id INTO id_partida1_var;
-	INSERT INTO dbo.Partida (id_jogo, data_ini, data_fim, regiao) VALUES ('jogoTst', '2023-04-05 15:20:00', '2023-04-05 16:00:00', 'Bahia') RETURNING id INTO id_partida2_var;
-	INSERT INTO dbo.Partida (id_jogo, data_ini, data_fim, regiao) VALUES ('jogoTst', '2022-05-05 20:20:00', '2022-05-06 21:00:00', 'Bahia') RETURNING id INTO id_partida3_var;
+    -- Insere um jogador teste e retorna o seu id
+	INSERT INTO dbo.Jogador (email, username, estado, regiao)
+    VALUES ('test@gmail.com', 'testPlayer', 'Ativo', 'Bahia')
+    RETURNING id INTO id_jogador_var;
 	
-
-    -- Insere as pontuações que o jogador teste obteve
-    INSERT INTO dbo.Pontuacao (id_partida, id_jogador, pontuacao) VALUES (id_partida1_var, id_jogador_var, 200);
-	INSERT INTO dbo.Pontuacao (id_partida, id_jogador, pontuacao) VALUES (id_partida2_var, id_jogador_var, 100);
-	INSERT INTO dbo.Pontuacao (id_partida, id_jogador, pontuacao) VALUES (id_partida3_var, id_jogador_var, 200);
-	 
-	-- Insere as compras de jogos efetuadas pelo jogador teste
-    INSERT INTO dbo.Compra (id_jogador, id_jogo, preco, data_compra) VALUES (id_jogador_var, 'jogoTst', 19.99, '2023-03-04 12:00:00');
-    INSERT INTO dbo.Compra (id_jogador, id_jogo, preco, data_compra) VALUES (id_jogador_var, 'jogoTst', 10.99, '2020-05-11 13:30:00');
-    INSERT INTO dbo.Compra (id_jogador, id_jogo, preco, data_compra) VALUES (id_jogador_var, 'jogoTst', 19.99, '2021-11-01 10:40:00');
-    INSERT INTO dbo.Compra (id_jogador, id_jogo, preco, data_compra) VALUES (id_jogador_var, 'jogoTst', 10.99, '2022-01-04 21:00:00');
-
+	-- Insere os restantes dados a ser usados no teste conforme o id_jogador recebido
+	CALL dbo.insert_test_values(id_jogador_var);
 
     -- Executa a vista e guarda as variaveis necessarias
     SELECT id, num_partidas, num_jogos, pontuacao, estado, email, username INTO teste_jogador_id, teste_num_partidas, teste_num_jogos, teste_pontuacao, teste_estado, teste_email, teste_username 
@@ -389,11 +392,7 @@ BEGIN
     END IF;
 	
 	-- Apaga os dados inseridos no teste
-	DELETE FROM dbo.Jogador j WHERE j.id = id_jogador_var;
-	DELETE FROM dbo.Compra c  WHERE c.id_jogador = id_jogador_var;
-	DELETE FROM dbo.Pontuacao p WHERE p.id_jogador = id_jogador_var;
-	DELETE FROM dbo.Partida p WHERE p.id_jogo = 'jogoTst';
-	DELETE FROM dbo.Jogo j WHERE j.id = 'jogoTst';
+	CALL dbo.delete_test_values(id_jogador_var);
 END;
 $$ LANGUAGE plpgsql;
 
@@ -466,29 +465,13 @@ DECLARE
 	id_partida2_var INTEGER;
 	id_partida3_var INTEGER;
 BEGIN
-	 -- Insere um jogador teste
-    INSERT INTO dbo.Jogador (email, username, estado, regiao) VALUES ('test@gmail.com', 'testPlayer', 'Ativo', 'Bahia') RETURNING id INTO id_jogador_var;
+	 -- Insere um jogador teste e retorna o seu id
+    INSERT INTO dbo.Jogador (email, username, estado, regiao)
+	VALUES ('test@gmail.com', 'testPlayer', 'Ativo', 'Bahia')
+	RETURNING id INTO id_jogador_var;
 
-    -- Insere um jogo teste
-	INSERT INTO dbo.Jogo (id, nome, url) VALUES ('jogoTst', 'JogoTeste', 'http://www.jogoteste.com');
-   
-    -- Insere as partidas em que o jogador teste participou
-    INSERT INTO dbo.Partida (id_jogo, data_ini, data_fim, regiao) VALUES ('jogoTst', '2022-01-01 13:00:00', '2022-01-01 14:00:00', 'Bahia') RETURNING id INTO id_partida1_var;
-	INSERT INTO dbo.Partida (id_jogo, data_ini, data_fim, regiao) VALUES ('jogoTst', '2023-04-05 15:20:00', '2023-04-05 16:00:00', 'Bahia') RETURNING id INTO id_partida2_var;
-	INSERT INTO dbo.Partida (id_jogo, data_ini, data_fim, regiao) VALUES ('jogoTst', '2022-05-05 20:20:00', '2022-05-06 21:00:00', 'Bahia') RETURNING id INTO id_partida3_var;
-	
-
-    -- Insere as pontuações que o jogador teste obteve
-    INSERT INTO dbo.Pontuacao (id_partida, id_jogador, pontuacao) VALUES (id_partida1_var, id_jogador_var, 200);
-	INSERT INTO dbo.Pontuacao (id_partida, id_jogador, pontuacao) VALUES (id_partida2_var, id_jogador_var, 100);
-	INSERT INTO dbo.Pontuacao (id_partida, id_jogador, pontuacao) VALUES (id_partida3_var, id_jogador_var, 200);
-	 
-	-- Insere as compras de jogos efetuadas pelo jogador teste
-    INSERT INTO dbo.Compra (id_jogador, id_jogo, preco, data_compra) VALUES (id_jogador_var, 'jogoTst', 19.99, '2023-03-04 12:00:00');
-    INSERT INTO dbo.Compra (id_jogador, id_jogo, preco, data_compra) VALUES (id_jogador_var, 'jogoTst', 10.99, '2020-05-11 13:30:00');
-    INSERT INTO dbo.Compra (id_jogador, id_jogo, preco, data_compra) VALUES (id_jogador_var, 'jogoTst', 19.99, '2021-11-01 10:40:00');
-    INSERT INTO dbo.Compra (id_jogador, id_jogo, preco, data_compra) VALUES (id_jogador_var, 'jogoTst', 10.99, '2022-01-04 21:00:00');
-
+	-- Insere os restantes dados a ser usados no teste conforme o id_jogador recebido
+    CALL dbo.insert_test_values(id_jogador_var);
 
     -- Executa a vista e guarda as variaveis necessarias
     DELETE FROM dbo.jogadortotalinfo where id = id_jogador_var ;
@@ -499,11 +482,7 @@ BEGIN
     END IF;
 	
 	-- Apaga os dados inseridos no teste
-	DELETE FROM dbo.Jogador j WHERE j.id = id_jogador_var;
-	DELETE FROM dbo.Compra c  WHERE c.id_jogador = id_jogador_var;
-	DELETE FROM dbo.Pontuacao p WHERE p.id_jogador = id_jogador_var;
-	DELETE FROM dbo.Partida p WHERE p.id_jogo = 'jogoTst';
-	DELETE FROM dbo.Jogo j WHERE j.id = 'jogoTst';
+	CALL dbo.delete_test_values(id_jogador_var);
 
 END;
 $$;

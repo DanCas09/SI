@@ -23,4 +23,3 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-SELECT * FROM dbo.PontosJogoPorJogador('jg1');

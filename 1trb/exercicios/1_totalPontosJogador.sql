@@ -19,4 +19,4 @@ BEGIN
 END;
 $$;	
 
-SELECT dbo.totalPontosJogador(3) -- replace 1 with the identifier of a player
+
