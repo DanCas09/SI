@@ -28,7 +28,7 @@ BEGIN
       RAISE NOTICE 'Teste (d): criarJogador: Resultado OK';
     ELSE
       IF invalid_parameters THEN
-	  RAISE NOTICE 'Teste (d): email ou username passados como parametro invalidos: Resultado FAIL';
+	  RAISE NOTICE 'Teste (d): parametros passados como parametro invalidos: Resultado FAIL';
 	  ELSE
       RAISE NOTICE 'Teste (d): criarJogador: Resultado FAIL';
 	  END IF;
@@ -42,7 +42,7 @@ BEGIN
 END;
 $$;
 
-CALL dbo.test_funcoesJogador_criarJogador('jogador8@gmail.com', 'jogador4', 'Inativo', 'Baasdadhia');
+CALL dbo.test_funcoesJogador_criarJogador('jogador8@gmail.com', 'jogador4', 'Inativo', 'Lisboa');
 
 
 -----------------------------------------------
@@ -232,7 +232,7 @@ BEGIN
 	-- Insere um jogador teste
 	INSERT INTO dbo.Jogador (email, username, estado, regiao)
 	VALUES 
-	('testfunction@example.com', 'testfunction', 'Ativo', 'North America');
+	('testfunction@example.com', 'testfunction', 'Ativo', 'Lisboa');
 	
 	-- Obtem o id do jogador criado para efeito de teste
 	SELECT dbo.Jogador.id FROM dbo.Jogador INTO id_jogador_param
@@ -374,7 +374,7 @@ DECLARE
 BEGIN
     -- Insere um jogador teste e retorna o seu id
 	INSERT INTO dbo.Jogador (email, username, estado, regiao)
-    VALUES ('test@gmail.com', 'testPlayer', 'Ativo', 'Bahia')
+    VALUES ('test@gmail.com', 'testPlayer', 'Ativo', 'Lisboa')
     RETURNING id INTO id_jogador_var;
 	
 	-- Insere os restantes dados a ser usados no teste conforme o id_jogador recebido
@@ -467,7 +467,7 @@ DECLARE
 BEGIN
 	 -- Insere um jogador teste e retorna o seu id
     INSERT INTO dbo.Jogador (email, username, estado, regiao)
-	VALUES ('test@gmail.com', 'testPlayer', 'Ativo', 'Bahia')
+	VALUES ('test@gmail.com', 'testPlayer', 'Ativo', 'Lisboa')
 	RETURNING id INTO id_jogador_var;
 
 	-- Insere os restantes dados a ser usados no teste conforme o id_jogador recebido

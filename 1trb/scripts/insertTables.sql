@@ -1,14 +1,15 @@
+-- Regiao table
+INSERT INTO dbo.Regiao (nome) VALUES
+                                  ('Lisboa'),
+                                  ('Porto'),
+                                  ('Braga');
+
 -- Jogador table
 INSERT INTO dbo.Jogador (email, username, estado, regiao) VALUES
     ('jogador1@gmail.com', 'jogador1', 'Ativo', 'Lisboa'),
     ('jogador2@gmail.com', 'jogador2', 'Inativo', 'Porto'),
     ('jogador3@gmail.com', 'jogador3', 'Banido', 'Braga');
 
--- Regiao table
-INSERT INTO dbo.Regiao (nome) VALUES
-    ('Lisboa'),
-    ('Porto'),
-    ('Braga');
 
 -- Jogo table
 INSERT INTO dbo.Jogo (id, nome, url) VALUES

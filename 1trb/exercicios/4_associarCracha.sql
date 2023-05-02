@@ -16,9 +16,6 @@ DECLARE
   
 BEGIN
 	
-  -- Define o nível de isolamento da transação
-  -- SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
-  
   -- verifica parâmetros jogador/jogo
   IF NOT EXISTS (
         SELECT 1

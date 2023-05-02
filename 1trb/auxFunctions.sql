@@ -68,6 +68,25 @@ END;
 $$ LANGUAGE plpgsql;
 
 
+-- Função auxiliar que recebeo nome de uma regiao e lança uma exceção caso
+-- este não exista na base de dados
+CREATE OR REPLACE FUNCTION dbo.throw_if_regiao_does_not_exist(
+  nomeR VARCHAR(255)
+)
+RETURNS VOID AS $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1
+        FROM dbo.Regiao WHERE nome = nomeR
+    ) THEN
+        RAISE unique_violation USING MESSAGE = 'unique_violation';
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+
 -- Procedimento armazenado que insere dados para teste
 CREATE OR REPLACE PROCEDURE dbo.insert_test_values(
 	id_jogador_var INTEGER
@@ -86,15 +105,15 @@ BEGIN
 
     -- Insere as partidas em que o jogador teste participou
     INSERT INTO dbo.Partida (id_jogo, data_ini, data_fim, regiao)
-    VALUES ('jogoTst', '2022-01-01 13:00:00', '2022-01-01 14:00:00', 'Bahia')
+    VALUES ('jogoTst', '2022-01-01 13:00:00', '2022-01-01 14:00:00', 'Lisboa')
     RETURNING id INTO id_partida1_var;
 
     INSERT INTO dbo.Partida (id_jogo, data_ini, data_fim, regiao)
-    VALUES ('jogoTst', '2023-04-05 15:20:00', '2023-04-05 16:00:00', 'Bahia')
+    VALUES ('jogoTst', '2023-04-05 15:20:00', '2023-04-05 16:00:00', 'Lisboa')
     RETURNING id INTO id_partida2_var;
 
     INSERT INTO dbo.Partida (id_jogo, data_ini, data_fim, regiao)
-    VALUES ('jogoTst', '2022-05-05 20:20:00', '2022-05-06 21:00:00', 'Bahia')
+    VALUES ('jogoTst', '2022-05-05 20:20:00', '2022-05-06 21:00:00', 'Lisboa')
     RETURNING id INTO id_partida3_var;
 
     -- Insere as pontuações que o jogador teste obteve
