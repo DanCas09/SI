@@ -88,7 +88,7 @@ BEGIN
   EXCEPTION 
     WHEN OTHERS THEN
 	-- Raise the exception with the error message from the internal procedure
-      RAISE EXCEPTION '%', SQLERRM;
+      RAISE NOTICE '%', SQLERRM;
 	  
       -- Rollback the transaction on exception
       ROLLBACK;
@@ -105,7 +105,7 @@ CREATE OR REPLACE PROCEDURE dbo.associarCracha (
 LANGUAGE plpgsql
 AS $$
 BEGIN 
-	COMMIT; --rollback; -- ou commit. Termina transação corrente e inicia outra
+	--COMMIT; --rollback; -- ou commit. Termina transação corrente e inicia outra
 	SET TRANSACTION ISOLATION LEVEL READ COMMITTED; 
 	CALL dbo.associarCracha_handler(id_jogador_param, id_jogo_param, nome_cracha_param);
 
