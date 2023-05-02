@@ -163,7 +163,62 @@ END;
 $$;
 
 CALL dbo.test_total_pontos_jogador();
+------------------------------
+-- Test associar_cracha (f) --
+------------------------------
+-- Definição da função de teste
+CREATE OR REPLACE FUNCTION testarFuncoes()
+	RETURNS VOID AS $$
+DECLARE
+	pontuacaoJogadorResult INTEGER;
+	totalJogosJogadorResult INTEGER;
+BEGIN
+	-- Teste da função pontuacaoJogador
+	SELECT pontuacaoJogador(1) INTO pontuacaoJogadorResult;
+	IF (pontuacaoJogadorResult = 42) THEN
+		RAISE NOTICE 'Teste 1: pontuacaoJogador - Resultado OK';
+	ELSE
+		RAISE EXCEPTION 'Teste 1: pontuacaoJogador - Resultado FAIL';
+	END IF;
 
+	SELECT pontuacaoJogador(3) INTO pontuacaoJogadorResult;
+	IF (pontuacaoJogadorResult = 21) THEN
+		RAISE NOTICE 'Teste 2: pontuacaoJogador - Resultado OK';
+	ELSE
+		RAISE EXCEPTION 'Teste 2: pontuacaoJogador - Resultado FAIL';
+	END IF;
+
+	SELECT pontuacaoJogador(4) INTO pontuacaoJogadorResult;
+	IF (pontuacaoJogadorResult = 32) THEN
+		RAISE NOTICE 'Teste 3: pontuacaoJogador - Resultado OK';
+	ELSE
+		RAISE EXCEPTION 'Teste 3: pontuacaoJogador - Resultado FAIL';
+	END IF;
+
+	-- Teste da função totalJogosJogador
+	SELECT totalJogosJogador(1) INTO totalJogosJogadorResult;
+	IF (totalJogosJogadorResult = 3) THEN
+		RAISE NOTICE 'Teste 4: totalJogosJogador - Resultado OK';
+	ELSE
+		RAISE EXCEPTION 'Teste 4: totalJogosJogador - Resultado FAIL';
+	END IF;
+
+	SELECT totalJogosJogador(2) INTO totalJogosJogadorResult;
+	IF (totalJogosJogadorResult = 1) THEN
+		RAISE NOTICE 'Teste 5: totalJogosJogador - Resultado OK';
+	ELSE
+		RAISE EXCEPTION 'Teste 5: totalJogosJogador - Resultado FAIL';
+	END IF;
+
+	SELECT totalJogosJogador(3) INTO totalJogosJogadorResult;
+	IF (totalJogosJogadorResult = 1) THEN
+		RAISE NOTICE 'Teste 6: totalJogosJogador - Resultado OK';
+	ELSE
+		RAISE EXCEPTION 'Teste 6: totalJogosJogador - Resultado FAIL';
+	END IF;
+
+END;
+$$ LANGUAGE plpgsql;
 
 ------------------------------
 -- Test associar_cracha (h) --
@@ -354,6 +409,51 @@ END;
 $$;
 
 CALL dbo.test_juntar_conversa(2, 2);
+
+------------------------------
+-- Test jogadorTotalInfo (k) --
+------------------------------
+
+-- Teste 1: inserção bem sucedida de mensagem
+DO $$
+	DECLARE
+		count_before INTEGER;
+		count_after INTEGER;
+	BEGIN
+		SELECT COUNT(*) INTO count_before FROM Mensagem WHERE id_conversa = 1;
+		PERFORM dbo.enviarmensagem(1, 1, 'Olá, como estás?');
+		SELECT COUNT(*) INTO count_after FROM Mensagem WHERE id_conversa = 1;
+
+		IF (count_after = count_before + 1) THEN
+			RAISE NOTICE 'Teste (1): enviarMensagem: Resultado OK';
+		ELSE
+			RAISE EXCEPTION 'Teste (1): enviarMensagem: Resultado FAIL';
+		END IF;
+	END $$;
+
+-- Teste 2: inserção falhada de mensagem devido a uma conversa inexistente
+DO $$
+	BEGIN
+		BEGIN
+			PERFORM dbo.enviarmensagem(10, 2, 'Mensagem de teste');
+			RAISE EXCEPTION 'Teste (2): enviarMensagem: Resultado FAIL';
+		EXCEPTION
+			WHEN OTHERS THEN
+				RAISE NOTICE 'Teste (2): enviarMensagem: Resultado OK';
+		END;
+	END $$;
+
+-- Teste 3: inserção falhada de mensagem devido a um jogador inexistente
+DO $$
+	BEGIN
+		BEGIN
+			PERFORM dbo.enviarmensagem(1, 10, 'Mensagem de teste');
+			RAISE EXCEPTION 'Teste (3): enviarMensagem: Resultado FAIL';
+		EXCEPTION
+			WHEN OTHERS THEN
+				RAISE NOTICE 'Teste (3): enviarMensagem: Resultado OK';
+		END;
+	END $$;
 
 ------------------------------
 -- Test jogadorTotalInfo (l) --
