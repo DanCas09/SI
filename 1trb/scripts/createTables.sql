@@ -1,14 +1,15 @@
+CREATE TABLE dbo.Regiao (
+    nome VARCHAR(255) PRIMARY KEY
+);
+
 CREATE TABLE dbo.Jogador (
   id SERIAL PRIMARY KEY,
   email VARCHAR(255) UNIQUE NOT NULL,
   username VARCHAR(255) UNIQUE NOT NULL,
   estado VARCHAR(10) NOT NULL,
   regiao VARCHAR(255) NOT NULL,
+  FOREIGN KEY (regiao) REFERENCES dbo.Regiao (nome) ON DELETE CASCADE,
   CONSTRAINT check_status CHECK (estado IN ('Ativo', 'Inativo', 'Banido'))
-);
-
-CREATE TABLE dbo.Regiao (
-  nome VARCHAR(255) PRIMARY KEY
 );
 
 CREATE TABLE dbo.Jogo (
@@ -31,6 +32,7 @@ CREATE TABLE dbo.Partida (
   data_ini TIMESTAMP NOT NULL,
   data_fim TIMESTAMP,
   regiao VARCHAR(255) NOT NULL,
+  FOREIGN KEY (regiao) REFERENCES dbo.Regiao (nome) ON DELETE CASCADE,
   CHECK (data_fim >= data_ini)
 );
 

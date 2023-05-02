@@ -7,6 +7,7 @@ AS $$
 DECLARE
 	var1 VARCHAR(255);
 BEGIN
+	PERFORM dbo.throw_if_regiao_does_not_exist(regiaoJ);
 	PERFORM dbo.throw_if_emailOrUsernameOfJogador_already_exists(emailJ, usernameJ);
     INSERT INTO dbo.Jogador (email, username, estado, regiao)
     VALUES (emailJ, usernameJ, estadoJ, regiaoJ);
