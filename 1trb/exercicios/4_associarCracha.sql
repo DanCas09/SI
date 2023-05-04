@@ -108,7 +108,3 @@ BEGIN
 
 END;
 $$;
-
--- Teste --
- CALL dbo.associarCracha(1, 'jg1', 'Fantasma Branco');
-

@@ -34,7 +34,7 @@ BEGIN
 	  END IF;
     END IF;
 	
-	-- Remove o registro na tabela de jogador, caso exista
+	-- Remove o registro na tabela de jogador
 	IF successful_test THEN
 	 DELETE FROM dbo.Jogador
 	 WHERE email = emailJ;
@@ -453,9 +453,11 @@ BEGIN
         SELECT 1 FROM dbo.Mensagem m WHERE m.texto_mensagem = 'TESTE MESSAGE' AND m.id_jogador = id_jogador_param AND m.id_conversa = id_conversa_param
     ) THEN
         RAISE NOTICE 'Teste (k): enviarMensagem: Resultado FAIL';
+	ELSE 	
+		RAISE NOTICE 'Teste (k): enviarMensagem: Resultado OK';
     END IF;
 
-    RAISE NOTICE 'Teste (k): enviarMensagem: Resultado OK';
+   
 	
 	DELETE FROM dbo.Conversa_jogador cj WHERE cj.id_conversa = id_conversa_param AND cj.id_jogador = id_jogador_param;
 	DELETE FROM dbo.Conversa c WHERE c.id = id_conversa_param;

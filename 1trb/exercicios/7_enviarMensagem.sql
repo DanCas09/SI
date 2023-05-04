@@ -87,8 +87,3 @@ BEGIN
     
 END;
 $$;
-
--- Teste -- 
-CALL dbo.enviarMensagem(1, 1, 'VANESSA')
-
-

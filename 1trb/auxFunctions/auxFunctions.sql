@@ -52,6 +52,41 @@ END;
 $$;
 
 
+CREATE OR REPLACE FUNCTION dbo.throw_if_idConversa_does_not_exist(
+    idC Integer
+)
+RETURNS VOID
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    IF NOT EXISTS(
+        SELECT 1
+        FROM dbo.Conversa WHERE id = idC
+    ) THEN
+        RAISE invalid_parameter_value USING MESSAGE = 'invalid_input_value';
+    END IF;
+END;
+$$;
+
+
+CREATE OR REPLACE FUNCTION dbo.throw_if_conversaJogador_already_exists(
+idC INTEGER,
+ IDJ INTEGER
+)
+RETURNS VOID
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    IF EXISTS(
+        SELECT 1
+        FROM dbo.Conversa_jogador WHERE id_conversa = idC and id_jogador = idJ
+    ) THEN
+        RAISE unique_violation USING MESSAGE = 'unique_violation';
+    END IF;
+END;
+$$;
+
+
 -- Procedimento armazenado que insere dados para teste
 CREATE OR REPLACE PROCEDURE dbo.insert_test_values(
 	id_jogador_var INTEGER

@@ -22,6 +22,5 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Test output --
-SELECT * FROM dbo.PontosJogoPorJogador('jg1')
+
 

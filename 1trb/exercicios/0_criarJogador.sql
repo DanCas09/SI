@@ -4,8 +4,6 @@ DROP PROCEDURE IF EXISTS dbo.criarJogador;
 CREATE PROCEDURE dbo.criarJogador(emailJ VARCHAR(255), usernameJ VARCHAR(255), estadoJ VARCHAR(10), regiaoJ VARCHAR(25))
     LANGUAGE plpgsql
 AS $$
-DECLARE
-	var1 VARCHAR(255);
 BEGIN
 	PERFORM dbo.throw_if_regiao_does_not_exist(regiaoJ);
 	PERFORM dbo.throw_if_emailOrUsernameOfJogador_already_exists(emailJ, usernameJ);
