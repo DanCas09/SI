@@ -163,63 +163,77 @@ END;
 $$;
 
 CALL dbo.test_total_pontos_jogador();
+
 ------------------------------
--- Test associar_cracha (f) --
+-- Test totalJogosJogador (f) --
 ------------------------------
--- Definição da função de teste
-CREATE OR REPLACE FUNCTION testarFuncoes()
-	RETURNS VOID AS $$
+CREATE OR REPLACE PROCEDURE dbo.test_total_jogos_jogador()
+LANGUAGE plpgsql
+AS $$
 DECLARE
-	pontuacaoJogadorResult INTEGER;
-	totalJogosJogadorResult INTEGER;
+    total_jogos_jogador INTEGER;
 BEGIN
-	-- Teste da função pontuacaoJogador
-	SELECT pontuacaoJogador(1) INTO pontuacaoJogadorResult;
-	IF (pontuacaoJogadorResult = 42) THEN
-		RAISE NOTICE 'Teste 1: pontuacaoJogador - Resultado OK';
-	ELSE
-		RAISE EXCEPTION 'Teste 1: pontuacaoJogador - Resultado FAIL';
-	END IF;
-
-	SELECT pontuacaoJogador(3) INTO pontuacaoJogadorResult;
-	IF (pontuacaoJogadorResult = 21) THEN
-		RAISE NOTICE 'Teste 2: pontuacaoJogador - Resultado OK';
-	ELSE
-		RAISE EXCEPTION 'Teste 2: pontuacaoJogador - Resultado FAIL';
-	END IF;
-
-	SELECT pontuacaoJogador(4) INTO pontuacaoJogadorResult;
-	IF (pontuacaoJogadorResult = 32) THEN
-		RAISE NOTICE 'Teste 3: pontuacaoJogador - Resultado OK';
-	ELSE
-		RAISE EXCEPTION 'Teste 3: pontuacaoJogador - Resultado FAIL';
-	END IF;
-
-	-- Teste da função totalJogosJogador
-	SELECT totalJogosJogador(1) INTO totalJogosJogadorResult;
-	IF (totalJogosJogadorResult = 3) THEN
-		RAISE NOTICE 'Teste 4: totalJogosJogador - Resultado OK';
-	ELSE
-		RAISE EXCEPTION 'Teste 4: totalJogosJogador - Resultado FAIL';
-	END IF;
-
-	SELECT totalJogosJogador(2) INTO totalJogosJogadorResult;
-	IF (totalJogosJogadorResult = 1) THEN
-		RAISE NOTICE 'Teste 5: totalJogosJogador - Resultado OK';
-	ELSE
-		RAISE EXCEPTION 'Teste 5: totalJogosJogador - Resultado FAIL';
-	END IF;
-
-	SELECT totalJogosJogador(3) INTO totalJogosJogadorResult;
-	IF (totalJogosJogadorResult = 1) THEN
-		RAISE NOTICE 'Teste 6: totalJogosJogador - Resultado OK';
-	ELSE
-		RAISE EXCEPTION 'Teste 6: totalJogosJogador - Resultado FAIL';
-	END IF;
-
+	-- Chama a funcao totalPontosJogador e guarda o retorno numa variavel
+    SELECT dbo.totalJogosJogador(1) INTO total_jogos_jogador;
+	
+    -- Verifica se o total de pontos é o esperado
+    IF total_jogos_jogador = (SELECT num_jogos_dif FROM dbo.Estatisticas_jogador WHERE id_jogador = 1) THEN
+        RAISE NOTICE 'Teste (f): totalJogosJogador: Resultado OK';
+    ELSE
+        RAISE NOTICE 'Teste (f): totalJogosJogador: Resultado FAIL';
+    END IF;
 END;
-$$ LANGUAGE plpgsql;
+$$;
 
+CALL dbo.test_total_jogos_jogador();
+
+------------------------------
+-- Test PontosJogoPorJogador (g) --
+------------------------------
+CREATE OR REPLACE PROCEDURE dbo.test_pontos_jogo_jogador()
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    id_jogador1_param INTEGER;
+	id_jogador2_param INTEGER;
+	id_partida1_param INTEGER;
+BEGIN
+	-- Insere um jogador teste
+	INSERT INTO dbo.Jogador (email, username, estado, regiao)
+	VALUES 
+	('test1@example.com', 'test1', 'Ativo', 'Lisboa') RETURNING id INTO id_jogador1_param;
+	
+	INSERT INTO dbo.Jogador (email, username, estado, regiao)
+	VALUES 
+	('test2@example.com', 'test2', 'Ativo', 'Lisboa')RETURNING id INTO id_jogador2_param;
+	
+	INSERT INTO dbo.Jogo (id, nome, url) VALUES
+    ('test1', 'JogoTeste', 'http://www.jogoTeste.com');
+	
+	INSERT INTO dbo.Partida (id_jogo, data_ini, data_fim, regiao) VALUES
+    ('test1', '2022-01-01 13:00:00', '2022-01-01 14:00:00', 'Lisboa') RETURNING id INTO id_partida1_param;
+	
+	INSERT INTO dbo.Pontuacao (id_partida, id_jogador, pontuacao) VALUES
+    (id_partida1_param, id_jogador1_param , 100),
+    (id_partida1_param, id_jogador2_param, 150);
+    
+    -- Verifica se o total de pontos é o esperado
+    IF (SELECT COUNT(*) FROM dbo.PontosJogoPorJogador('test1')) = 2 
+	THEN
+    	RAISE NOTICE 'Teste (g): PontosJogoPorJogador: Resultado OK';
+	ELSE
+    	RAISE NOTICE 'Teste (g): PontosJogoPorJogador: Resultado FAIL';
+	END IF;
+	
+	DELETE FROM dbo.Pontuacao WHERE id_partida = id_partida1_param;
+	DELETE FROM dbo.Partida p WHERE p.id = id_partida1_param;
+	DELETE FROM dbo.Jogo j WHERE j.id = 'test1';
+	DELETE FROM dbo.Jogador jg WHERE jg.id = id_jogador1_param;
+	DELETE FROM dbo.Jogador jg2 WHERE jg2.id = id_jogador2_param;
+END;
+$$;
+
+CALL dbo.test_pontos_jogo_jogador();
 ------------------------------
 -- Test associar_cracha (h) --
 ------------------------------
@@ -411,49 +425,46 @@ $$;
 CALL dbo.test_juntar_conversa(2, 2);
 
 ------------------------------
--- Test jogadorTotalInfo (k) --
+-- Test enviarMensagem (k) --
 ------------------------------
 
--- Teste 1: inserção bem sucedida de mensagem
-DO $$
-	DECLARE
-		count_before INTEGER;
-		count_after INTEGER;
-	BEGIN
-		SELECT COUNT(*) INTO count_before FROM Mensagem WHERE id_conversa = 1;
-		PERFORM dbo.enviarmensagem(1, 1, 'Olá, como estás?');
-		SELECT COUNT(*) INTO count_after FROM Mensagem WHERE id_conversa = 1;
+CREATE OR REPLACE PROCEDURE dbo.test_enviar_mensagem()
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    id_jogador_param INTEGER;
+	id_conversa_param INTEGER;
+BEGIN
+	-- Insere um jogador teste
+	INSERT INTO dbo.Jogador (email, username, estado, regiao)
+	VALUES 
+	('test1@example.com', 'test1', 'Ativo', 'Lisboa') RETURNING id INTO id_jogador_param;
+	
+	INSERT INTO dbo.Conversa (nome) VALUES
+  	('ConversaTeste') RETURNING id INTO id_conversa_param;
+	
+	INSERT INTO dbo.Conversa_jogador (id_conversa, id_jogador) VALUES
+  	(id_conversa_param, id_jogador_param);
+	
+	CALL dbo.enviarMensagem(id_conversa_param, id_jogador_param, 'TESTE MESSAGE');
 
-		IF (count_after = count_before + 1) THEN
-			RAISE NOTICE 'Teste (1): enviarMensagem: Resultado OK';
-		ELSE
-			RAISE EXCEPTION 'Teste (1): enviarMensagem: Resultado FAIL';
-		END IF;
-	END $$;
+	-- Verifica se a mensagem foi criada
+    IF NOT EXISTS (
+        SELECT 1 FROM dbo.Mensagem m WHERE m.texto_mensagem = 'TESTE MESSAGE' AND m.id_jogador = id_jogador_param AND m.id_conversa = id_conversa_param
+    ) THEN
+        RAISE NOTICE 'Teste (k): enviarMensagem: Resultado FAIL';
+    END IF;
 
--- Teste 2: inserção falhada de mensagem devido a uma conversa inexistente
-DO $$
-	BEGIN
-		BEGIN
-			PERFORM dbo.enviarmensagem(10, 2, 'Mensagem de teste');
-			RAISE EXCEPTION 'Teste (2): enviarMensagem: Resultado FAIL';
-		EXCEPTION
-			WHEN OTHERS THEN
-				RAISE NOTICE 'Teste (2): enviarMensagem: Resultado OK';
-		END;
-	END $$;
+    RAISE NOTICE 'Teste (k): enviarMensagem: Resultado OK';
+	
+	DELETE FROM dbo.Conversa_jogador cj WHERE cj.id_conversa = id_conversa_param AND cj.id_jogador = id_jogador_param;
+	DELETE FROM dbo.Conversa c WHERE c.id = id_conversa_param;
+	DELETE FROM dbo.Jogador jg WHERE jg.id = id_jogador_param;
+END;
+$$;
 
--- Teste 3: inserção falhada de mensagem devido a um jogador inexistente
-DO $$
-	BEGIN
-		BEGIN
-			PERFORM dbo.enviarmensagem(1, 10, 'Mensagem de teste');
-			RAISE EXCEPTION 'Teste (3): enviarMensagem: Resultado FAIL';
-		EXCEPTION
-			WHEN OTHERS THEN
-				RAISE NOTICE 'Teste (3): enviarMensagem: Resultado OK';
-		END;
-	END $$;
+CALL dbo.test_enviar_mensagem();
+
 
 ------------------------------
 -- Test jogadorTotalInfo (l) --

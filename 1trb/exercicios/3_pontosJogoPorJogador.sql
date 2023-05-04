@@ -6,7 +6,7 @@
 
 DROP FUNCTION IF EXISTS dbo.PontosJogoPorJogador;
 
-CREATE OR REPLACE FUNCTION dbo.PontosJogoPorJogador(jogo_referencia VARCHAR(10))
+CREATE OR REPLACE FUNCTION dbo.PontosJogoPorJogador(IN jogo_referencia VARCHAR(10))
 RETURNS TABLE(id_jogador INTEGER, total_pontos INTEGER) AS $$
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM dbo.Jogo WHERE id = jogo_referencia) THEN
@@ -22,4 +22,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+-- Test output --
+SELECT * FROM dbo.PontosJogoPorJogador('jg1')
 
