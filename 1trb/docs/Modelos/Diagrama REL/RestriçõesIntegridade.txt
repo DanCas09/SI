@@ -1,0 +1,21 @@
+
+Tabela Jogador :  
+RI1 -> colunas "email" e "username" da tabela "Jogador"
+	 não podem ser repetidas (unique);
+RI2 -> coluna "estado" permite apenas os valores "Ativo",
+	 "Inativo" ou "Banido";
+
+Tabela Partida:
+RI1 -> coluna "data_fim" garante que a data de término da partida
+	 não seja anterior à data de início;
+
+Tabela Partida_Multijogador: 
+RI1 -> coluna “estado” permite apenas os valores "Por iniciar",
+       "A aguardar jogadores", "Em curso" ou "Terminada"
+
+Tabela Partida_Normal:
+RI1 -> coluna "grau_dificuldade" permite apenas valores de 1 a 5;
+
+
+
+

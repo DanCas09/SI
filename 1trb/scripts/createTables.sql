@@ -39,7 +39,7 @@ CREATE TABLE dbo.Partida (
 CREATE TABLE dbo.Partida_normal (
   id_partida INT PRIMARY KEY REFERENCES dbo.Partida(id) ON DELETE CASCADE,
   grau_dificuldade INT NOT NULL,
-  CONSTRAINT check_grau_dificuldade CHECK (grau_dificuldade >= 1 AND grau_dificuldade <= 3)
+  CONSTRAINT check_grau_dificuldade CHECK (grau_dificuldade >= 1 AND grau_dificuldade <= 5)
 );
 
 CREATE TABLE dbo.Partida_multijogador (
