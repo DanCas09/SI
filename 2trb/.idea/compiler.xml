@@ -9,8 +9,5 @@
         <module name="JPAEx" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="JPAEx" target="16" />
-    </bytecodeTargetLevel>
   </component>
 </project>
