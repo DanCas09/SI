@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/JPAEx/JPAEx.iml" filepath="$PROJECT_DIR$/JPAEx/JPAEx.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/JPAExIntelliJ.iml" filepath="$PROJECT_DIR$/.idea/JPAExIntelliJ.iml" />
     </modules>
   </component>
