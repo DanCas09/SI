@@ -3,9 +3,9 @@
     <persistence-unit name="JPAEx" transaction-type="RESOURCE_LOCAL">
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
         <properties>
-            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/sisinf"/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/postgres"/>
             <property name="jakarta.persistence.jdbc.user" value="postgres"/>
-            <property name="jakarta.persistence.jdbc.password" value="pa$$w0rd"/>
+            <property name="jakarta.persistence.jdbc.password" value="isel"/>
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
 
             <property name="eclipselink.logging.level" value="FINE"/>
