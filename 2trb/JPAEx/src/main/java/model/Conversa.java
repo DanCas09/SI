@@ -20,7 +20,7 @@ public class Conversa {
     @JoinTable(name = "conversa_jogador",
             joinColumns = @JoinColumn(name = "id_conversa"),
             inverseJoinColumns = @JoinColumn(name = "id_jogador"))
-    private Set<Jogador> jogadors = new LinkedHashSet<>();
+    private Set<Jogador> conversa_jogador = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "idConversa")
     private Set<Mensagem> mensagems = new LinkedHashSet<>();
@@ -39,14 +39,6 @@ public class Conversa {
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    public Set<Jogador> getJogadors() {
-        return jogadors;
-    }
-
-    public void setJogadors(Set<Jogador> jogadors) {
-        this.jogadors = jogadors;
     }
 
     public Set<Mensagem> getMensagems() {

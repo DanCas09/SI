@@ -34,7 +34,7 @@ public class Partida {
     @OneToOne(mappedBy = "partida")
     private PartidaNormal partidaNormal;
 
-    @OneToMany(mappedBy = "partida")
+    @OneToMany(mappedBy = "idPartida")
     private Set<Pontuacao> pontuacaos = new LinkedHashSet<>();
 
     public Integer getId() {

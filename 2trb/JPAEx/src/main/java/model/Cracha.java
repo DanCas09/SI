@@ -30,7 +30,7 @@ public class Cracha {
     @JoinTable(name = "crachas_jogador",
             joinColumns = @JoinColumn(name = "id_cracha"),
             inverseJoinColumns = @JoinColumn(name = "id_jogador"))
-    private Set<Jogador> jogadors = new LinkedHashSet<>();
+    private Set<Jogador> crachas_jogador = new LinkedHashSet<>();
 
     public Integer getId() {
         return id;
@@ -70,14 +70,6 @@ public class Cracha {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
-    }
-
-    public Set<Jogador> getJogadors() {
-        return jogadors;
-    }
-
-    public void setJogadors(Set<Jogador> jogadors) {
-        this.jogadors = jogadors;
     }
 
 }

@@ -26,19 +26,24 @@ public class Jogador {
     @JoinColumn(name = "regiao", nullable = false)
     private Regiao regiao;
 
-    @ManyToMany(mappedBy = "idJogador")
-    private Set<Jogador> jogadors = new LinkedHashSet<>();
+    @JoinTable(name = "Amizade", joinColumns = {
+    @JoinColumn(name = "Jogador_Que_Adiciona", referencedColumnName = "jogador_id", nullable =   false)}, inverseJoinColumns = {
+    @JoinColumn(name = "Jogador_Adicionado", referencedColumnName = "jogador_id", nullable = false)})
+    @ManyToMany
+    private Set<Jogador> amizade;
 
+    @ManyToMany(mappedBy = "amizade")
+    private Set<Jogador> aceitou_amizade;
     @OneToMany(mappedBy = "idJogador")
     private Set<Compra> compras = new LinkedHashSet<>();
 
-    @ManyToMany(mappedBy = "idJogador")
-    private Set<Conversa> conversas = new LinkedHashSet<>();
+    @ManyToMany(mappedBy = "conversa_jogador")
+    private Set<Conversa> conversaJogadors = new LinkedHashSet<>();
 
-    @ManyToMany(mappedBy = "idJogador")
+    @ManyToMany(mappedBy = "crachas_jogador")
     private Set<Cracha> crachas = new LinkedHashSet<>();
 
-    @OneToOne(mappedBy = "idJogador")
+    @OneToOne(mappedBy = "jogador")
     private EstatisticasJogador estatisticasJogador;
 
     @OneToMany(mappedBy = "idJogador")
@@ -87,28 +92,12 @@ public class Jogador {
         this.regiao = regiao;
     }
 
-    public Set<Jogador> getJogadors() {
-        return jogadors;
-    }
-
-    public void setJogadors(Set<Jogador> jogadors) {
-        this.jogadors = jogadors;
-    }
-
     public Set<Compra> getCompras() {
         return compras;
     }
 
     public void setCompras(Set<Compra> compras) {
         this.compras = compras;
-    }
-
-    public Set<Conversa> getConversas() {
-        return conversas;
-    }
-
-    public void setConversas(Set<Conversa> conversas) {
-        this.conversas = conversas;
     }
 
     public Set<Cracha> getCrachas() {
