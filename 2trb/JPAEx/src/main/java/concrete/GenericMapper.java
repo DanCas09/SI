@@ -14,9 +14,8 @@ public class GenericMapper<T, TId> implements IMapper<T, TId> {
     public TId create(T elem) throws Exception {
         try (DataScope ds = new DataScope()) {
             EntityManager em = ds.getEntityManager();
-            em.getTransaction().begin();
             em.persist(elem);
-            em.getTransaction().commit();
+            ds.validateWork();
             return extractId(elem);
         } catch(Exception e) {
             System.out.println(e.getMessage());
@@ -28,7 +27,7 @@ public class GenericMapper<T, TId> implements IMapper<T, TId> {
     public T read(TId id) throws Exception {
         try (DataScope ds = new DataScope()) {
             EntityManager em = ds.getEntityManager();
-            return em.find(getEntityClass(), id)    ;
+            return em.find(getEntityClass(), id);
         } catch(Exception e) {
             System.out.println(e.getMessage());
             throw e;
@@ -39,15 +38,28 @@ public class GenericMapper<T, TId> implements IMapper<T, TId> {
     public void update(T elem) throws Exception {
         try (DataScope ds = new DataScope()) {
             EntityManager em = ds.getEntityManager();
-            em.getTransaction().begin();
             em.merge(elem);
-            em.getTransaction().commit();
             ds.validateWork();
         } catch(Exception e) {
             System.out.println(e.getMessage());
             throw e;
         }
     }
+
+    public void delete(T elem) throws Exception {
+        try (DataScope ds = new DataScope()) {
+            EntityManager em = ds.getEntityManager();
+            TId elementId = extractId(elem);
+            if (elementId == null)
+                throw new java.lang.IllegalAccessException("Entidade inexistente");
+            em.remove(elem);
+            ds.validateWork();
+        } catch(Exception e) {
+            System.out.println(e.getMessage());
+            throw e;
+        }
+    }
+
 
     private TId extractId(T e) {
         try {

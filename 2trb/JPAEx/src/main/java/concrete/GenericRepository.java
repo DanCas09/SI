@@ -34,11 +34,7 @@ public class GenericRepository<Tentity, Tkey> implements IRepository<Tentity, Tk
 
     @Override
     public Tentity Find(Tkey k) throws Exception {
-        try (DataScope ds = new DataScope()){
-            EntityManager em = ds.getEntityManager();
-
-            //TODO
-
+        try {
             return mapper.read(k);
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -65,7 +61,7 @@ public class GenericRepository<Tentity, Tkey> implements IRepository<Tentity, Tk
             EntityManager em = ds.getEntityManager();
 
             //TODO
-            mapper.update(entity);
+            mapper.delete(entity);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             throw e;

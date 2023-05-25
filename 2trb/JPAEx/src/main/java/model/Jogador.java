@@ -38,13 +38,13 @@ public class Jogador {
     @ManyToMany(mappedBy = "idJogador")
     private Set<Cracha> crachas = new LinkedHashSet<>();
 
-    @OneToOne(mappedBy = "jogador")
+    @OneToOne(mappedBy = "idJogador")
     private EstatisticasJogador estatisticasJogador;
 
     @OneToMany(mappedBy = "idJogador")
     private Set<Mensagem> mensagems = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "jogador")
+    @OneToMany(mappedBy = "idJogador")
     private Set<Pontuacao> pontuacaos = new LinkedHashSet<>();
 
     public Integer getId() {

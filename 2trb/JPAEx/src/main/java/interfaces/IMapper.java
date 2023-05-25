@@ -5,4 +5,6 @@ public interface IMapper<T, TId> {
     T read(TId id) throws Exception;
 
     void update(T e) throws Exception;
+
+    void delete(T e) throws Exception;
 }
