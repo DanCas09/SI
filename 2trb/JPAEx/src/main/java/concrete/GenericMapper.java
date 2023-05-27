@@ -5,10 +5,16 @@ import jakarta.persistence.EntityManager;
 import scopes.DataScope;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
 
 public class GenericMapper<T, TId> implements IMapper<T, TId> {
 
+    private final Class<T> entityClass;
+    private final Class<TId> keyClass;
+
+    public GenericMapper(Class<T> entityClass, Class<TId> keyClass) {
+        this.entityClass = entityClass;
+        this.keyClass = keyClass;
+    }
 
     @Override
     public TId create(T elem) throws Exception {
@@ -17,7 +23,7 @@ public class GenericMapper<T, TId> implements IMapper<T, TId> {
             em.persist(elem);
             ds.validateWork();
             return extractId(elem);
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             throw e;
         }
@@ -27,8 +33,8 @@ public class GenericMapper<T, TId> implements IMapper<T, TId> {
     public T read(TId id) throws Exception {
         try (DataScope ds = new DataScope()) {
             EntityManager em = ds.getEntityManager();
-            return em.find(getEntityClass(), id);
-        } catch(Exception e) {
+            return em.find(entityClass, id);
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             throw e;
         }
@@ -40,7 +46,7 @@ public class GenericMapper<T, TId> implements IMapper<T, TId> {
             EntityManager em = ds.getEntityManager();
             em.merge(elem);
             ds.validateWork();
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             throw e;
         }
@@ -51,30 +57,22 @@ public class GenericMapper<T, TId> implements IMapper<T, TId> {
             EntityManager em = ds.getEntityManager();
             TId elementId = extractId(elem);
             if (elementId == null)
-                throw new java.lang.IllegalAccessException("Entidade inexistente");
+                throw new IllegalAccessException("Entidade inexistente");
             em.remove(elem);
             ds.validateWork();
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             throw e;
         }
     }
 
-
     private TId extractId(T e) {
         try {
-            Class<?> entityClass = getEntityClass();
             Method idGetter = entityClass.getMethod("getId");
-            return (TId) idGetter.invoke(e);
+            return keyClass.cast(idGetter.invoke(e));
         } catch (Exception ex) {
             // Handle exception appropriately based on your application's error handling strategy
             return null;
         }
     }
-
-    private Class<T> getEntityClass() {
-        ParameterizedType parameterizedType = (ParameterizedType) getClass().getGenericSuperclass();
-        return (Class<T>) parameterizedType.getActualTypeArguments()[0];
-    }
-
 }
