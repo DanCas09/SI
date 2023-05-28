@@ -42,4 +42,8 @@ public class Regiao {
         this.partidas = partidas;
     }
 
+    // Implementar o método toString() para que o nome da região seja exibido
+    public String toString() {
+        return this.nome;
+    }
 }

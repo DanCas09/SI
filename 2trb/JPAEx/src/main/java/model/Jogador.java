@@ -132,4 +132,21 @@ public class Jogador {
         this.pontuacaos = pontuacaos;
     }
 
+    // Implementar o método toString() para que o programa consiga imprimir o objeto Jogador
+    @Override
+    public String toString() {
+        return "Jogador{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", username='" + username + '\'' +
+                ", estado='" + estado + '\'' +
+                ", regiao=" + regiao +
+//                ", compras=" + compras +
+//                ", crachas=" + crachas +
+//                ", estatisticasJogador=" + estatisticasJogador +
+//                ", mensagems=" + mensagems +
+//                ", pontuacaos=" + pontuacaos +
+                '}';
+    }
+
 }

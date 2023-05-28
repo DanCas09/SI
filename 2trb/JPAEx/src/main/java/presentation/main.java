@@ -21,12 +21,12 @@ public class main {
             jogador.setRegiao(r);
 
             System.out.println("------CREATE-----");
-            genericR.Add(jogador);
+            //genericR.Add(jogador);
 
 //            System.in.read();
 
-            System.out.println("------DELETE-----");
-            genericR.Delete(jogador);
+//            System.out.println("------DELETE-----");
+//            genericR.Delete(jogador);
 
             System.out.println("------HERE-----");
             System.out.println("Jogador added successfully. ID: " + jogador.getId());
