@@ -22,6 +22,7 @@ public class GenericMapper<T, TId> implements IMapper<T, TId> {
             EntityManager em = ds.getEntityManager();
             em.persist(elem);
             ds.validateWork();
+            //em.getTransaction().commit();
             return extractId(elem);
         } catch (Exception e) {
             System.out.println(e.getMessage());

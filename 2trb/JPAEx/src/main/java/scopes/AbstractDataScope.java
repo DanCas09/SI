@@ -31,19 +31,39 @@ public abstract class AbstractDataScope implements AutoCloseable {
             isMine = false;
     }
 
+    //    @Override
+//    public void close() throws Exception {
+//        if (isMine) {
+//            if (threadLocal.get().ok && voted) {
+//                threadLocal.get().em.getTransaction().commit();
+//            } else
+//                threadLocal.get().em.getTransaction().rollback();
+//            threadLocal.get().em.close();
+//            threadLocal.get().ef.close();
+//            threadLocal.remove();
+//        } else if (!voted)
+//            cancelWork();
+//    }
     @Override
     public void close() throws Exception {
         if (isMine) {
-            if (threadLocal.get().ok && voted) {
-                threadLocal.get().em.getTransaction().commit();
-            } else
-                threadLocal.get().em.getTransaction().rollback();
-            threadLocal.get().em.close();
-            threadLocal.get().ef.close();
+            Session session = threadLocal.get();
+            if (session.ok && voted) {
+                EntityManager em = session.em;
+                if (em.getTransaction().isActive()) { // Check if a transaction is active
+                    em.getTransaction().commit();
+                }
+            } else {
+                session.em.getTransaction().rollback();
+            }
+            session.em.close();
+            session.ef.close();
             threadLocal.remove();
-        } else if (!voted)
+        } else if (!voted) {
             cancelWork();
+        }
     }
+
 
     public void validateWork() {
         voted = true;

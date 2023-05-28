@@ -49,6 +49,8 @@ public class GenericRepository<Tentity, Tkey> implements IRepository<Tentity, Tk
         try (DataScope ds = new DataScope()) {
             EntityManager em = ds.getEntityManager();
             mapper.create(entity);
+            ds.validateWork(); // Validate the work and mark the transaction for commit
+            em.getTransaction().commit(); // Commit the transaction
         } catch (Exception e) {
             System.out.println(e.getMessage());
             throw e;
@@ -60,6 +62,8 @@ public class GenericRepository<Tentity, Tkey> implements IRepository<Tentity, Tk
         try (DataScope ds = new DataScope()) {
             EntityManager em = ds.getEntityManager();
             mapper.delete(entity);
+            ds.validateWork();
+            em.getTransaction().commit();
         } catch (Exception e) {
             System.out.println(e.getMessage());
             throw e;
@@ -71,6 +75,8 @@ public class GenericRepository<Tentity, Tkey> implements IRepository<Tentity, Tk
         try (DataScope ds = new DataScope()) {
             EntityManager em = ds.getEntityManager();
             mapper.update(entity);
+            ds.validateWork(); // Validate the work and mark the transaction for commit
+            em.getTransaction().commit(); // Commit the transaction
         } catch (Exception e) {
             System.out.println(e.getMessage());
             throw e;
