@@ -35,7 +35,7 @@ public class Service {
         return sb.toString();
     }
 
-    public static void registerFunction(String funName, ParameterFunction[] funArgs, Object[] args, EntityManager em) throws Exception {
+    public static void registerFunction(String funName, ParameterFunction[] funArgs, EntityManager em) throws Exception {
         //em.getTransaction().begin();
         StoredProcedureQuery f = em.createStoredProcedureQuery(funName);
         if(functionMap.get(funName) == null){

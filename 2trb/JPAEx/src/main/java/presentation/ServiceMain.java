@@ -14,21 +14,16 @@ public class ServiceMain {
         public static void main(String[] args) throws Exception {
             try (DataScope ds = new DataScope()){
 
-                ParameterFunction[] funArgsRegister = {
-                        new ParameterFunction(Integer.class, ParameterMode.IN),
-                        new ParameterFunction(Integer.class, ParameterMode.OUT)
-                };
-
-                Service.registerFunction("totalJogosJogador", funArgsRegister,null ,em);
-
-                System.out.println("totalJogosJogador function");
-
-                String functionName = "totalJogosJogador";
-
                 ParameterFunction idJogador = new ParameterFunction(Integer.class, ParameterMode.IN);
                 ParameterFunction totalJogosParameter = new ParameterFunction(Integer.class, ParameterMode.OUT);
 
                 ParameterFunction[] funArgs = {idJogador, totalJogosParameter};
+
+                Service.registerFunction("dbo.totalJogosJogador", funArgs, ds.getEntityManager());
+
+                System.out.println("totalJogosJogador function");
+
+                String functionName = "dbo.totalJogosJogador";
 
                 Object[] args2 = {1}; //idJogador
                 Integer totalJogos = (Integer) Service.executeFunction(functionName, args2);
