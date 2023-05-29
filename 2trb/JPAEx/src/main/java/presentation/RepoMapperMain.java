@@ -4,7 +4,7 @@ import concrete.GenericRepository;
 import model.Jogador;
 import model.Regiao;
 
-public class main {
+public class RepoMapperMain {
 
     public static void main(String[] args) {
 
@@ -21,15 +21,15 @@ public class main {
             jogador.setRegiao(r);
 
             System.out.println("------CREATE-----");
-            //genericR.Add(jogador);
-
+//            genericR.Add(jogador);
+//
 //            System.in.read();
 
-//            System.out.println("------DELETE-----");
+           System.out.println("------DELETE-----");
 //            genericR.Delete(jogador);
 
-            System.out.println("------HERE-----");
-            System.out.println("Jogador added successfully. ID: " + jogador.getId());
+//            System.out.println("------HERE-----");
+//            System.out.println("Jogador added successfully. ID: " + jogador.getId());
 
             // Printing all the Jogadores in the database
             genericR.GetAll().forEach(System.out::println);
