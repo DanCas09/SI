@@ -1,10 +1,10 @@
 package concrete;
 
-import interfaces.IMapper;
-import interfaces.IRepository;
+import concrete.interfaces.IMapper;
+import concrete.interfaces.IRepository;
 
 import jakarta.persistence.EntityManager;
-import scopes.DataScope;
+import businessLogic.scopes.DataScope;
 
 import java.util.List;
 

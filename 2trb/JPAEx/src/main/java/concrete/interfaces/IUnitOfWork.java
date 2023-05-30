@@ -1,4 +1,4 @@
-package interfaces;
+package concrete.interfaces;
 
 public interface IUnitOfWork {
     void NotifyInsert(Object entity);

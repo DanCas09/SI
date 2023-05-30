@@ -1,4 +1,4 @@
-package interfaces;
+package concrete.interfaces;
 
 import java.util.List;
 

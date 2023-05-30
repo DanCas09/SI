@@ -1,4 +1,4 @@
-package scopes;
+package businessLogic.scopes;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;

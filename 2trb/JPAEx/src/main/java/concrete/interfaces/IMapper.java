@@ -1,4 +1,4 @@
-package interfaces;
+package concrete.interfaces;
 public interface IMapper<T, TId> {
     TId create(T e) throws Exception;
 

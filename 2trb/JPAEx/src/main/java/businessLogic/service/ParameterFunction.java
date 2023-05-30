@@ -1,4 +1,4 @@
-package service;
+package businessLogic.service;
 
 import jakarta.persistence.ParameterMode;
 

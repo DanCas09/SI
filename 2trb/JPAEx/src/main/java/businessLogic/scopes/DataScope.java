@@ -1,4 +1,4 @@
-package scopes;
+package businessLogic.scopes;
 
 public class DataScope extends AbstractDataScope implements AutoCloseable{
 

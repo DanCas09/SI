@@ -1,8 +1,8 @@
 package presentation;
 
+import businessLogic.register.entities.JogadorRM;
 import concrete.GenericRepository;
 import model.Jogador;
-import model.Regiao;
 
 public class RepoMapperMain {
 
@@ -11,17 +11,10 @@ public class RepoMapperMain {
         GenericRepository<Jogador, Integer> genericR = new GenericRepository<>(Jogador.class, Integer.class);
         try {
             // Can you create an example of Jogador to test the method add and delete?
-            Regiao r = new Regiao();
-            r.setNome("Lisboa");
-
-            Jogador jogador = new Jogador();
-            jogador.setEmail("koff@gmail.com");
-            jogador.setUsername("koff");
-            jogador.setEstado("Ativo");
-            jogador.setRegiao(r);
+            Jogador jogador = new JogadorRM("koff@gmail.com", "koff", "Ativo", "Lisboa").createJogador();
 
             System.out.println("------CREATE-----");
-//            genericR.Add(jogador);
+            genericR.Add(jogador);
 //
 //            System.in.read();
 

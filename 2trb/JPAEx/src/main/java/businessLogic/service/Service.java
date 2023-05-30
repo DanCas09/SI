@@ -1,10 +1,8 @@
-package service;
+package businessLogic.service;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.ParameterMode;
 import jakarta.persistence.Query;
 import jakarta.persistence.StoredProcedureQuery;
-import scopes.DataScope;
 
 import java.util.HashMap;
 import java.util.Map;
