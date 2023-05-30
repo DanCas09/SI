@@ -10,8 +10,7 @@ public class ServiceMain {
     static EntityManager em = ds.getEntityManager();
 
     public static void main(String[] args) throws Exception {
-        try (DataScope ds = new DataScope()) {
-
+        try {
             ExecutorDB exe = new ExecutorDB();
 
             int idJogador = 1;
