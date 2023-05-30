@@ -11,17 +11,21 @@ public class ServiceMain {
 
     public static void main(String[] args) throws Exception {
         try (DataScope ds = new DataScope()) {
+
+            ExecutorDB exe = new ExecutorDB();
+
             int idJogador = 1;
             String functionName = "totalJogosJogador";
             Object[] argsFun = { idJogador }; // idJogador
 
-            ExecutorDB.registerAndExecuteFunction(functionName, argsFun, em);
+            exe.execute(argsFun, functionName, em);
 
-            //idJogador = 1;
+            idJogador = 2;
             functionName = "totalPontosJogador";
             argsFun = new Object[]{ idJogador }; // idJogador
 
-            ExecutorDB.registerAndExecuteFunction(functionName, argsFun, em);
+            exe.execute(argsFun, functionName, em);
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

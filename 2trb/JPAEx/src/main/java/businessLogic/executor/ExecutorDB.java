@@ -12,7 +12,7 @@ public class ExecutorDB implements Executor {
         registerAndExecuteFunction(functionName, args, em);
     }
 
-    public static void registerAndExecuteFunction(String functionName, Object[] args, EntityManager em) throws Exception {
+    private void registerAndExecuteFunction(String functionName, Object[] args, EntityManager em) throws Exception {
         String functionCanonicalName = SCHEMA + "." + functionName;
 
         switch (functionName) {
@@ -23,7 +23,7 @@ public class ExecutorDB implements Executor {
         executeFunction(functionCanonicalName, args);
     }
 
-    private static void executeFunction(String functionName, Object[] args) throws Exception {
+    private void executeFunction(String functionName, Object[] args) {
         Object result = Service.executeFunction(functionName, args);
         System.out.println("Function " + functionName + " executed with result: " + result);
     }
