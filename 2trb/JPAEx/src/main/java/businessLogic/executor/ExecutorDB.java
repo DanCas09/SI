@@ -6,8 +6,12 @@ import jakarta.persistence.EntityManager;
 
 public class ExecutorDB implements Executor {
 
+    private RegisterDB register;
+    private ExecutorOperation executorOperation;
+
     public ExecutorDB(EntityManager em) {
-        registerAllFunctions(em);
+        register = new RegisterDB(em);
+        registerAllFunctions();
     }
 
     private static final String SCHEMA = "dbo";
@@ -17,10 +21,10 @@ public class ExecutorDB implements Executor {
         registerAndExecuteFunction(functionName, args, em);
     }
 
-    private void registerAllFunctions(EntityManager em) {
+    private void registerAllFunctions() {
         try {
-            RegisterDB.registerTotalJogosJogadorFunction(em);
-            RegisterDB.registerTotalPontosJogadorFunction(em);
+            register.registerTotalJogosJogadorFunction();
+            register.registerTotalPontosJogadorFunction();
         } catch (Exception e) {
             e.printStackTrace();
         }
