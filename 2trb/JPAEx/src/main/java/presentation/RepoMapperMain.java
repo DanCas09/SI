@@ -19,7 +19,7 @@ public class RepoMapperMain {
 //            System.in.read();
 
            System.out.println("------DELETE-----");
-//            genericR.Delete(jogador);
+            genericR.Delete(jogador);
 
 //            System.out.println("------HERE-----");
 //            System.out.println("Jogador added successfully. ID: " + jogador.getId());

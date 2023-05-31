@@ -1,6 +1,7 @@
 package presentation;
 
 import businessLogic.executor.ExecutorDB;
+import businessLogic.register.entities.JogadorRM;
 import jakarta.persistence.EntityManager;
 import businessLogic.scopes.DataScope;
 
@@ -11,7 +12,7 @@ public class ServiceMain {
 
     public static void main(String[] args) throws Exception {
         try {
-            ExecutorDB exe = new ExecutorDB();
+            ExecutorDB exe = new ExecutorDB(em);
 
             int idJogador = 1;
             String functionName = "totalJogosJogador";
@@ -24,6 +25,19 @@ public class ServiceMain {
             argsFun = new Object[]{ idJogador }; // idJogador
 
             exe.execute(argsFun, functionName, em);
+
+//            functionName = "criarJogador";
+//            argsFun = new Object[]{ "daniel@gmail.com", "daniel", "Ativo", "Lisboa" }; // email, username, estado, regiao
+//
+//            exe.execute(argsFun, functionName, em);
+
+//            functionName = "desativarJogador";
+//            idJogador = 44;
+//            argsFun = new Object[]{ idJogador }; // idJogador
+//
+//            exe.execute(argsFun, functionName, em);
+
+
 
         } catch (Exception e) {
             e.printStackTrace();

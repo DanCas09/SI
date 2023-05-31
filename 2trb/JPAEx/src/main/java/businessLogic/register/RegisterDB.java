@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.ParameterMode;
 import businessLogic.service.ParameterFunction;
 import businessLogic.service.Service;
+import model.Regiao;
 
 public class RegisterDB {
     public static void registerTotalJogosJogadorFunction(EntityManager entityManager) throws Exception {
@@ -23,4 +24,5 @@ public class RegisterDB {
 
         Service.registerFunction("dbo.totalPontosJogador", funArgs, entityManager);
     }
+
 }

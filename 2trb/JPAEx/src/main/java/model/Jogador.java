@@ -26,22 +26,23 @@ public class Jogador {
     @JoinColumn(name = "regiao", nullable = false)
     private Regiao regiao;
 
-    @JoinTable(name = "Amizade", joinColumns = {
-    @JoinColumn(name = "Jogador_Que_Adiciona", referencedColumnName = "jogador_id", nullable =   false)}, inverseJoinColumns = {
-    @JoinColumn(name = "Jogador_Adicionado", referencedColumnName = "jogador_id", nullable = false)})
-    @ManyToMany
-    private Set<Jogador> amizade;
+//    @JoinTable(name = "Amizade", joinColumns = {
+//    @JoinColumn(name = "Jogador_Que_Adiciona", referencedColumnName = "jogador_id", nullable =   false)}, inverseJoinColumns = {
+//    @JoinColumn(name = "Jogador_Adicionado", referencedColumnName = "jogador_id", nullable = false)})
+//    @ManyToMany
+//    private Set<Jogador> amizade;
 
-    @ManyToMany(mappedBy = "amizade")
-    private Set<Jogador> aceitou_amizade;
+//    @ManyToMany(mappedBy = "amizade")
+//    private Set<Jogador> aceitou_amizade;
+
     @OneToMany(mappedBy = "idJogador")
     private Set<Compra> compras = new LinkedHashSet<>();
 
-    @ManyToMany(mappedBy = "conversa_jogador")
-    private Set<Conversa> conversaJogadors = new LinkedHashSet<>();
+//    @ManyToMany(mappedBy = "conversa_jogador")
+//    private Set<Conversa> conversaJogadors = new LinkedHashSet<>();
 
-    @ManyToMany(mappedBy = "crachas_jogador")
-    private Set<Cracha> crachas = new LinkedHashSet<>();
+//    @ManyToMany(mappedBy = "crachas_jogador")
+//    private Set<Cracha> crachas = new LinkedHashSet<>();
 
     @OneToOne(mappedBy = "jogador")
     private EstatisticasJogador estatisticasJogador;
@@ -100,13 +101,13 @@ public class Jogador {
         this.compras = compras;
     }
 
-    public Set<Cracha> getCrachas() {
-        return crachas;
-    }
-
-    public void setCrachas(Set<Cracha> crachas) {
-        this.crachas = crachas;
-    }
+//    public Set<Cracha> getCrachas() {
+//        return crachas;
+//    }
+//
+//    public void setCrachas(Set<Cracha> crachas) {
+//        this.crachas = crachas;
+//    }
 
     public EstatisticasJogador getEstatisticasJogador() {
         return estatisticasJogador;

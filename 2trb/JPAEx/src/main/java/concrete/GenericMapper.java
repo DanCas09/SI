@@ -59,6 +59,7 @@ public class GenericMapper<T, TId> implements IMapper<T, TId> {
             TId elementId = extractId(elem);
             if (elementId == null)
                 throw new IllegalAccessException("Entidade inexistente");
+            em.merge(elem);
             em.remove(elem);
             ds.validateWork();
         } catch (Exception e) {

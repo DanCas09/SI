@@ -6,26 +6,44 @@ import jakarta.persistence.EntityManager;
 
 public class ExecutorDB implements Executor {
 
+    public ExecutorDB(EntityManager em) {
+        registerAllFunctions(em);
+    }
+
     private static final String SCHEMA = "dbo";
+
     @Override
     public void execute(Object[] args, String functionName, EntityManager em) throws Exception {
         registerAndExecuteFunction(functionName, args, em);
     }
 
+    private void registerAllFunctions(EntityManager em) {
+        try {
+            RegisterDB.registerTotalJogosJogadorFunction(em);
+            RegisterDB.registerTotalPontosJogadorFunction(em);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void registerAndExecuteFunction(String functionName, Object[] args, EntityManager em) throws Exception {
         String functionCanonicalName = SCHEMA + "." + functionName;
 
-        switch (functionName) {
-            case "totalJogosJogador" -> RegisterDB.registerTotalJogosJogadorFunction(em);
-            case "totalPontosJogador" -> RegisterDB.registerTotalPontosJogadorFunction(em);
-            default -> throw new IllegalArgumentException("Function " + functionName + " not found");
+        // Verify if function or procedure then execute
+        if (Service.isFunction(functionCanonicalName)) {
+            executeFunction(functionCanonicalName, args);
         }
-        executeFunction(functionCanonicalName, args);
+        else executeProc(functionCanonicalName, args, em);
     }
 
     private void executeFunction(String functionName, Object[] args) {
         Object result = Service.executeFunction(functionName, args);
         System.out.println("Function " + functionName + " executed with result: " + result);
+    }
+
+    private void executeProc(String procName, Object[] args, EntityManager em) throws Exception {
+        Service.executeProcedure(procName, args, em);
+        System.out.println("Procedure " + procName + " executed");
     }
 
 }

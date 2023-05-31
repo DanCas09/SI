@@ -12,7 +12,7 @@ public class Service {
     private static Map<String, StoredProcedureQuery> functionMap = new HashMap<>();
 
     public static void executeProcedure(String procedureName, Object[] args, EntityManager em) throws Exception {
-        em.getTransaction().begin();
+        //em.getTransaction().begin();
         Query q = em.createNativeQuery("call " + procedureName + prepareArgs(args));
         for (int i = 0; i < args.length; i++) {
             q.setParameter(i + 1, args[i]);
@@ -51,5 +51,9 @@ public class Service {
         }
         q.execute();
         return q.getOutputParameterValue(args.length + 1);
+    }
+
+    public static boolean isFunction(String functionName) {
+        return functionMap.containsKey(functionName);
     }
 }
