@@ -18,7 +18,7 @@ public class Service {
             q.setParameter(i + 1, args[i]);
         }
         q.executeUpdate();
-        em.getTransaction().commit();
+        //em.getTransaction().commit();
     }
 
     private static String prepareArgs(Object... args) {

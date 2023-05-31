@@ -8,11 +8,11 @@
             <property name="jakarta.persistence.jdbc.password" value="isel"/>
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
 
-            <property name="eclipselink.logging.level" value="FINE"/>
-            <property name="eclipselink.logging.parameters" value="true"/>
-            <property name="eclipselink.logging.level.connection" value="FINEST" />
-            <property name="eclipselink.logging.level.transaction" value="FINEST" />
-            <property name="eclipselink.logging.level.query" value="FINEST" />
+            <property name="eclipselink.logging.level" value="WARNING" />
+            <property name="eclipselink.logging.parameters" value="false"/>
+            <property name="eclipselink.logging.level.connection" value="WARNING" />
+            <property name="eclipselink.logging.level.transaction" value="WARNING" />
+            <property name="eclipselink.logging.level.query" value="WARNING" />
         </properties>
     </persistence-unit>
 </persistence>

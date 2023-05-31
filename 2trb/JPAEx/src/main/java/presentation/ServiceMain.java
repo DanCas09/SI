@@ -40,7 +40,7 @@ public class ServiceMain {
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String n = br.readLine();
-        EntityManager em = null;
+        EntityManager em;
 
         while (!Objects.equals(n, "exit")) {
 
@@ -57,10 +57,12 @@ public class ServiceMain {
                     case "l" -> showCommandMenu();
                     default -> menu();
                 }
-                n = br.readLine();
-                //em.close();
+                ds.validateWork();
             } catch (Exception e) {
                 e.printStackTrace();
+            } finally {
+                showCommandMenu();
+                n = br.readLine();
             }
         }
     }
