@@ -86,4 +86,10 @@ public class Jogo {
         this.partidas = partidas;
     }
 
+    public String toString(){
+        return "id: " + id + "\n" +
+                "nome: " + nome + "\n" +
+                "url: " + url + "\n";
+    }
+
 }

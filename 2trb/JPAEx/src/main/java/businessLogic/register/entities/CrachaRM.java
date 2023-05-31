@@ -1,18 +1,19 @@
 package businessLogic.register.entities;
 
+import concrete.interfaces.IRepository;
 import model.Cracha;
 import model.Jogo;
 
 public class CrachaRM {
 
-    private String idJogo;
+    private Jogo jogo;
     private String nome;
     private Integer pontuacao;
     private String imgUrl;
 
 
-    public CrachaRM(String idJogo, String nome, Integer pontuacao, String imgUrl){
-        this.idJogo = idJogo;
+    public CrachaRM(Jogo jogo, String nome, Integer pontuacao, String imgUrl){
+        this.jogo = jogo;
         this.nome = nome;
         this.pontuacao = pontuacao;
         this.imgUrl = imgUrl;
@@ -21,8 +22,7 @@ public class CrachaRM {
     public Cracha createCracha(){
         Cracha cracha = new Cracha();
 
-
-        cracha.setIdJogo(idJogo);
+        cracha.setIdJogo(jogo);
         cracha.setNome(nome);
         cracha.setPontuacao(pontuacao);
         cracha.setImageUrl(imgUrl);

@@ -72,4 +72,12 @@ public class Cracha {
         this.imageUrl = imageUrl;
     }
 
+    public String toString(){
+        return "id: " + id + "\n" +
+                "idJogo: " + idJogo.getId() + "\n" +
+                "nome: " + nome + "\n" +
+                "pontuacao: " + pontuacao + "\n" +
+                "imageUrl: " + imageUrl + "\n";
+    }
+
 }
