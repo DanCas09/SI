@@ -46,6 +46,7 @@ public class GenericMapper<T, TId> implements IMapper<T, TId> {
         try (DataScope ds = new DataScope()) {
             EntityManager em = ds.getEntityManager();
             em.merge(elem);
+            //em.flush();
             ds.validateWork();
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -59,7 +60,7 @@ public class GenericMapper<T, TId> implements IMapper<T, TId> {
             TId elementId = extractId(elem);
             if (elementId == null)
                 throw new IllegalAccessException("Entidade inexistente");
-            em.merge(elem);
+            elem = em.merge(elem);
             em.remove(elem);
             ds.validateWork();
         } catch (Exception e) {
