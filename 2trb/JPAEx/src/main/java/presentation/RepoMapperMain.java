@@ -1,7 +1,9 @@
 package presentation;
 
+import businessLogic.register.entities.CrachaRM;
 import businessLogic.register.entities.JogadorRM;
 import concrete.GenericRepository;
+import model.Cracha;
 import model.Jogador;
 
 public class RepoMapperMain {
@@ -36,6 +38,10 @@ public class RepoMapperMain {
             // Printing all the Jogadores in the database
             genericR.GetAll().forEach(System.out::println);
             //System.out.println(genericR.Find(1));
+
+            // NOW FOR CRACHA
+
+            Cracha cracha = new CrachaRM("1", "Cracha 1", 100, "https://www.google.com").createCracha();
 
 
         } catch (Exception e) {

@@ -44,6 +44,14 @@ public class Jogador {
 //    @ManyToMany(mappedBy = "crachas_jogador")
 //    private Set<Cracha> crachas = new LinkedHashSet<>();
 
+    //    public Set<Cracha> getCrachas() {
+//        return crachas;
+//    }
+//
+//    public void setCrachas(Set<Cracha> crachas) {
+//        this.crachas = crachas;
+//    }
+
     @OneToOne(mappedBy = "jogador")
     private EstatisticasJogador estatisticasJogador;
 
@@ -101,13 +109,6 @@ public class Jogador {
         this.compras = compras;
     }
 
-//    public Set<Cracha> getCrachas() {
-//        return crachas;
-//    }
-//
-//    public void setCrachas(Set<Cracha> crachas) {
-//        this.crachas = crachas;
-//    }
 
     public EstatisticasJogador getEstatisticasJogador() {
         return estatisticasJogador;
