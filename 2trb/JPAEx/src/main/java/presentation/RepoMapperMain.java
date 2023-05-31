@@ -19,15 +19,15 @@ public class RepoMapperMain {
             Jogador jogador = new JogadorRM("koff@gmail.com", "koff", "Ativo", "Lisboa").createJogador();
 
 //            System.out.println("------READ-----");
-//            Jogador jogador1 = genericJogador.Find(1);
-//            System.out.println(jogador1);
+            Jogador jogador1 = genericJogador.Find(49);
+            System.out.println(jogador1);
 
 //            System.out.println("------CREATE-----");
 //            genericJogador.Add(jogador);
 //
 //
-//            System.out.println("------DELETE-----");
-//            genericJogador.Delete(jogador);
+            System.out.println("------DELETE-----");
+            genericJogador.Delete(jogador1);
 //
 //            System.out.println("------UPDATE-----");
 //            String newEmail = "changed@gmail.com";
@@ -39,15 +39,15 @@ public class RepoMapperMain {
 //            System.out.println("Jogador added successfully. ID: " + jogador.getId());
 
             // Printing all the Jogadores in the database
-            genericJogador.GetAll().forEach(System.out::println);
+//            genericJogador.GetAll().forEach(System.out::println);
             //System.out.println(genericJogador.Find(1));
 
             // NOW FOR CRACHA
-            Jogo jogo = genericJogo.Find("jg1");
-            System.out.println(jogo);
-
-            Cracha cracha = new CrachaRM(jogo, "NOVO CRACHA", 100, "https://www.google.com").createCracha();
-            genericCracha.Add(cracha);
+//            Jogo jogo = genericJogo.Find("jg1");
+//            System.out.println(jogo);
+//
+//            Cracha cracha = new CrachaRM(jogo, "NOVO CRACHA", 100, "https://www.google.com").createCracha();
+//            genericCracha.Add(cracha);
 
         } catch (Exception e) {
             e.printStackTrace();
