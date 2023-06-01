@@ -34,21 +34,23 @@ public class Service {
     }
 
     public static void registerFunction(String funName, ParameterFunction[] funArgs, EntityManager em) throws Exception {
-        //em.getTransaction().begin();
         StoredProcedureQuery f = em.createStoredProcedureQuery(funName);
-        if(functionMap.get(funName) == null){
+        //if(functionMap.get(funName) == null){
             for (int i = 0; i < funArgs.length; i++) {
                 f.registerStoredProcedureParameter(i + 1, funArgs[i].classParameter(), funArgs[i].mode());
             }
             functionMap.put(funName, f);
-        }
+        //}
     }
 
-    public static Object executeFunction(String procName, Object[] args) {
+    public static Object executeFunction(String procName, Object[] args, EntityManager em) throws Exception {
         StoredProcedureQuery q = functionMap.get(procName);
+
+        System.out.println(em.isOpen());
         for (int i = 0; i < args.length; i++) {
             q.setParameter(i + 1, args[i]);
         }
+
         q.execute();
         return q.getOutputParameterValue(args.length + 1);
     }

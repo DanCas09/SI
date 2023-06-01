@@ -40,12 +40,14 @@ public class ServiceMain {
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String n = br.readLine();
-        EntityManager em;
+        //EntityManager em;
 
         while (!Objects.equals(n, "exit")) {
 
             try (DataScope ds = new DataScope()) {
-                em = ds.getEntityManager();
+                EntityManager em  = ds.getEntityManager();
+                System.out.println(em.toString());
+
                 exe = new ExecutorOperation(em);
 
                 switch (n) {

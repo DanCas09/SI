@@ -7,7 +7,6 @@ import jakarta.persistence.EntityManager;
 public class ExecutorDB implements Executor {
 
     private RegisterDB register;
-    private ExecutorOperation executorOperation;
 
     public ExecutorDB(EntityManager em) {
         register = new RegisterDB(em);
@@ -35,13 +34,13 @@ public class ExecutorDB implements Executor {
 
         // Verify if function or procedure then execute
         if (Service.isFunction(functionCanonicalName)) {
-            executeFunction(functionCanonicalName, args);
+            executeFunction(functionCanonicalName, args, em);
         }
         else executeProc(functionCanonicalName, args, em);
     }
 
-    private void executeFunction(String functionName, Object[] args) {
-        Object result = Service.executeFunction(functionName, args);
+    private void executeFunction(String functionName, Object[] args, EntityManager em) throws Exception {
+        Object result = Service.executeFunction(functionName, args, em);
         System.out.println("Function " + functionName + " executed with result: " + result);
     }
 
