@@ -10,6 +10,8 @@ import model.Regiao;
 public class RegisterDB {
 
     EntityManager em;
+
+
     public RegisterDB(EntityManager em) {
         this.em = em;
     }
@@ -20,7 +22,7 @@ public class RegisterDB {
 
         ParameterFunction[] funArgs = { idJogador, totalJogosParameter };
 
-        Service.registerFunction("dbo.totalJogosJogador", funArgs, em);
+        service.registerFunction("dbo.totalJogosJogador", funArgs);
     }
 
     public void registerTotalPontosJogadorFunction() throws Exception {
@@ -29,7 +31,7 @@ public class RegisterDB {
 
         ParameterFunction[] funArgs = { idJogador, totalPontosParameter };
 
-        Service.registerFunction("dbo.totalPontosJogador", funArgs, em);
+        service.registerFunction("dbo.totalPontosJogador", funArgs);
     }
 
 

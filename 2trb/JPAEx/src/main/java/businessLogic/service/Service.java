@@ -9,9 +9,15 @@ import java.util.Map;
 
 
 public class Service {
-    private static Map<String, StoredProcedureQuery> functionMap = new HashMap<>();
+    private  Map<String, StoredProcedureQuery> functionMap = new HashMap<>();
 
-    public static void executeProcedure(String procedureName, Object[] args, EntityManager em) throws Exception {
+
+
+    public Service(EntityManager em) {
+        this.em = em;
+    }
+
+    public void executeProcedure(String procedureName, Object[] args) throws Exception {
         //em.getTransaction().begin();
         Query q = em.createNativeQuery("call " + procedureName + prepareArgs(args));
         for (int i = 0; i < args.length; i++) {
@@ -21,7 +27,7 @@ public class Service {
         //em.getTransaction().commit();
     }
 
-    private static String prepareArgs(Object... args) {
+    private String prepareArgs(Object... args) {
         StringBuilder sb = new StringBuilder();
         sb.append("(");
         for (int i = 0; i < args.length; i++) {
@@ -33,7 +39,7 @@ public class Service {
         return sb.toString();
     }
 
-    public static void registerFunction(String funName, ParameterFunction[] funArgs, EntityManager em) throws Exception {
+    public void registerFunction(String funName, ParameterFunction[] funArgs) throws Exception {
         //em.getTransaction().begin();
         StoredProcedureQuery f = em.createStoredProcedureQuery(funName);
         if(functionMap.get(funName) == null){
@@ -44,16 +50,18 @@ public class Service {
         }
     }
 
-    public static Object executeFunction(String procName, Object[] args) {
-        StoredProcedureQuery q = functionMap.get(procName);
+    public Object executeFunction(String procName, Object[] args ) {
+        var a = em;
+        System.out.println(em);
+        //StoredProcedureQuery q = functionMap.get(procName);
         for (int i = 0; i < args.length; i++) {
-            q.setParameter(i + 1, args[i]);
+            func.setParameter(i + 1, args[i]);
         }
-        q.execute();
-        return q.getOutputParameterValue(args.length + 1);
+        func.execute();
+        return func.getOutputParameterValue(args.length + 1);
     }
 
-    public static boolean isFunction(String functionName) {
+    public boolean isFunction(String functionName) {
         return functionMap.containsKey(functionName);
     }
 }
