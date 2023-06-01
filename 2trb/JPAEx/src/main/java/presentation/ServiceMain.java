@@ -1,8 +1,6 @@
 package presentation;
 
-import businessLogic.executor.ExecutorDB;
 import businessLogic.executor.ExecutorOperation;
-import businessLogic.register.entities.JogadorRM;
 import jakarta.persistence.EntityManager;
 import businessLogic.scopes.DataScope;
 
@@ -31,6 +29,8 @@ public class ServiceMain {
                 "3 -> (d) : banirJogador\n" +
                 "4 -> (e) : totalPontosJogador\n" +
                 "5 -> (f) : totalJogosJogador\n" +
+                "6 -> (g) : pontosJogoPorJogador\n" +
+                "7 -> (h) : associarCracha\n" +
                 "exit -> exit\n" +
                 "l -> menu\n" +
                 "\n");
@@ -56,6 +56,8 @@ public class ServiceMain {
                     case "3" -> banirJogadorOption();
                     case "4" -> totalPontosJogadorOption();
                     case "5" -> totalJogosJogadorOption();
+                    case "6" -> pontosJogoPorJogadorOption();
+                    case "7" -> associarCrachaOption();
                     case "l" -> showCommandMenu();
                     default -> menu();
                 }
@@ -68,6 +70,7 @@ public class ServiceMain {
             }
         }
     }
+
 
     private static void criarJogadorOption() {
         try {
@@ -135,6 +138,27 @@ public class ServiceMain {
             int idJogador = Integer.parseInt(br.readLine());
             exe.totalJogosJogador(idJogador);
             System.out.println("---- Total Jogos Jogador ----");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void pontosJogoPorJogadorOption() {
+
+    }
+
+    private static void associarCrachaOption() {
+        try {
+            System.out.println("---- Associar Cracha ----");
+            System.out.println("Id Jogador: ");
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            int idJogador = Integer.parseInt(br.readLine());
+            System.out.println("Id Jogo: ");
+            String idJogo = br.readLine();
+            System.out.println("Nome Cracha: ");
+            String nomeCracha = br.readLine();
+            exe.associarCracha(idJogador, idJogo, nomeCracha);
+
         } catch (Exception e) {
             e.printStackTrace();
         }

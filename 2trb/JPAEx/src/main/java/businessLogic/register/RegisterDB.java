@@ -22,7 +22,7 @@ public class RegisterDB {
 
         ParameterFunction[] funArgs = { idJogador, totalJogosParameter };
 
-        service.registerFunction("dbo.totalJogosJogador", funArgs);
+        Service.registerFunction("dbo.totalJogosJogador", funArgs, em);
     }
 
     public void registerTotalPontosJogadorFunction() throws Exception {
@@ -31,7 +31,7 @@ public class RegisterDB {
 
         ParameterFunction[] funArgs = { idJogador, totalPontosParameter };
 
-        service.registerFunction("dbo.totalPontosJogador", funArgs);
+        Service.registerFunction("dbo.totalPontosJogador", funArgs, em);
     }
 
 

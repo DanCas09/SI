@@ -63,4 +63,10 @@ public class ExecutorOperation  {
         exe.execute(args, functionName);
     }
 
+    @Procedure
+    public void associarCracha(int idJogador, String idJogo, String nomeCracha) throws Exception {
+        Object[] args = { idJogador, idJogo, nomeCracha };
+        String functionName = "associarCracha";
+        exe.execute(args, functionName);
+    }
 }

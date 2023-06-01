@@ -28,23 +28,9 @@ public class ExecutorDB implements Executor {
         registerAndExecuteFunction(functionName, args);
     }
 
-    /*
-    private void registerAllFunctions() {
-        try {
-            register.registerTotalJogosJogadorFunction();
-            register.registerTotalPontosJogadorFunction();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    */
-
-
     private void registerAndExecuteFunction(String functionName, Object[] args) throws Exception {
         String functionCanonicalName = SCHEMA + "." + functionName;
         Optional<Method> m = Arrays.stream(ExecutorOperation.class.getMethods()).filter(it->it.getName().equals(functionName)).findFirst();
-
-        register.
 
         // Verify if function or procedure then execute
         if (m.isPresent() && m.get().isAnnotationPresent(Function.class)) {
@@ -54,12 +40,12 @@ public class ExecutorDB implements Executor {
     }
 
     private void executeFunction(String functionName, Object[] args) {
-        Object result = service.executeFunction(functionName, args);
+        Object result = Service.executeFunction(functionName, args);
         System.out.println("Function " + functionName + " executed with result: " + result);
     }
 
     private void executeProc(String procName, Object[] args) throws Exception {
-        service.executeProcedure(procName, args);
+        Service.executeProcedure(procName, args, em);
         System.out.println("Procedure " + procName + " executed");
     }
 
