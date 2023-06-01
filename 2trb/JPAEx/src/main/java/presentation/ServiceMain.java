@@ -29,8 +29,12 @@ public class ServiceMain {
                 "3 -> (d) : banirJogador\n" +
                 "4 -> (e) : totalPontosJogador\n" +
                 "5 -> (f) : totalJogosJogador\n" +
-                "6 -> (g) : pontosJogoPorJogador\n" +
+                "6 -> (g) : pontosJogoPorJogador (TODO)\n" +
                 "7 -> (h) : associarCracha\n" +
+                "8 -> (i) : iniciarConversa (TODO)\n" +
+                "9 -> (j) : juntarConversa\n" +
+                "10 -> (k) : enviarMensagem\n" +
+                "11 -> (l) : jogadorTotalInfo (TODO)\n" +
                 "exit -> exit\n" +
                 "l -> menu\n" +
                 "\n");
@@ -58,6 +62,10 @@ public class ServiceMain {
                     case "5" -> totalJogosJogadorOption();
                     case "6" -> pontosJogoPorJogadorOption();
                     case "7" -> associarCrachaOption();
+                    case "8" -> iniciarConversaOption();
+                    case "9" -> juntarConversaOption();
+                    case "10" -> enviarMensagemOption();
+                    case "11" -> jogadorTotalInfoOption();
                     case "l" -> showCommandMenu();
                     default -> menu();
                 }
@@ -143,7 +151,10 @@ public class ServiceMain {
         }
     }
 
+    //TODO
     private static void pontosJogoPorJogadorOption() {
+        System.out.println("---- Pontos Jogo Por Jogador ----");
+
 
     }
 
@@ -162,6 +173,65 @@ public class ServiceMain {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    //TOFINISH
+    private static void iniciarConversaOption() {
+        try {
+            System.out.println("---- Iniciar Conversa ----");
+            System.out.println("Id Jogador: ");
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            int idJogador = Integer.parseInt(br.readLine());
+            System.out.println("Nome Conversa: ");
+            String nomeConversa = br.readLine();
+            System.out.println("Id Conversa: ");
+            int idConversa = Integer.parseInt(br.readLine());
+
+            exe.iniciarConversa(idJogador, nomeConversa, idConversa);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        }
+
+    private static void juntarConversaOption() {
+        try {
+            System.out.println("---- Juntar Conversa ----");
+            System.out.println("Id Jogador: ");
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            int idJogador = Integer.parseInt(br.readLine());
+            System.out.println("Id Conversa: ");
+            int idConversa = Integer.parseInt(br.readLine());
+
+
+            exe.juntarConversa(idJogador, idConversa);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void enviarMensagemOption() {
+        try {
+            System.out.println("---- Enviar Mensagem ----");
+            System.out.println("Id Conversa: ");
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            int idConversa = Integer.parseInt(br.readLine());
+            System.out.println("Id Jogador: ");
+            int idJogador = Integer.parseInt(br.readLine());
+            System.out.println("Texto Mensagem: ");
+            String textoMensagem = br.readLine();
+
+            exe.enviarMensagem(idConversa, idJogador, textoMensagem);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    //TODO
+    private static void jogadorTotalInfoOption() {
+
     }
 
 

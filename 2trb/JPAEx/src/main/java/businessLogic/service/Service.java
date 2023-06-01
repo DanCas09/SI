@@ -24,6 +24,7 @@ public class Service {
             q.setParameter(i + 1, args[i]);
         }
         q.executeUpdate();
+
     }
 
     private static String prepareArgs(Object... args) {

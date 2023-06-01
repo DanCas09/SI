@@ -69,4 +69,25 @@ public class ExecutorOperation  {
         String functionName = "associarCracha";
         exe.execute(args, functionName);
     }
+
+    @Procedure
+    public void iniciarConversa(int idJogador, String nomeConversa, int idConversa) throws Exception {
+        Object[] args = { idJogador, nomeConversa, idConversa };
+        String functionName = "iniciarConversa";
+        exe.execute(args, functionName);
+    }
+
+    @Procedure
+    public void juntarConversa(int idJogador, int idConversa) throws Exception {
+        Object[] args = { idJogador, idConversa };
+        String functionName = "juntarConversa";
+        exe.execute(args, functionName);
+    }
+
+    @Procedure
+    public void enviarMensagem(int idConversa, int idJogador, String textoMensagem) throws Exception {
+        Object[] args = { idConversa, idJogador, textoMensagem };
+        String functionName = "enviarMensagem";
+        exe.execute(args, functionName);
+    }
 }
