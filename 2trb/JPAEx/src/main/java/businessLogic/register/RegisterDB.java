@@ -35,5 +35,14 @@ public class RegisterDB {
     }
 
 
+    // ISTO ESTÁ MAL
+    public void registerPontosJogoPorJogadorFunction() {
+        ParameterFunction idJogo = new ParameterFunction(String.class, ParameterMode.IN);
+        ParameterFunction pontosParameter = new ParameterFunction(Integer.class, ParameterMode.OUT);
+
+        ParameterFunction[] funArgs = { idJogo, pontosParameter };
+
+        Service.registerFunction("dbo.pontosJogoPorJogador", funArgs, em);
+    }
 
 }

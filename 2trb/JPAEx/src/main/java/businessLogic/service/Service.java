@@ -10,12 +10,6 @@ import java.util.Map;
 
 
 public class Service {
-    //private  Map<String, StoredProcedureQuery> functionMap = new HashMap<>();
-
-//    public Service(EntityManager em) {
-//        this.em = em;
-//    }
-
     private static StoredProcedureQuery currentFunction;
 
     public static void executeProcedure(String procedureName, Object[] args, EntityManager em) {

@@ -49,7 +49,7 @@ public class ServiceMain {
         while (!Objects.equals(n, "exit")) {
 
             try (DataScope ds = new DataScope()) {
-                EntityManager em  = ds.getEntityManager();
+                EntityManager em = ds.getEntityManager();
                 System.out.println(em.toString());
 
                 exe = new ExecutorOperation(em);
@@ -66,7 +66,7 @@ public class ServiceMain {
                     case "9" -> juntarConversaOption();
                     case "10" -> enviarMensagemOption();
                     case "11" -> jogadorTotalInfoOption();
-                    case "l" -> showCommandMenu();
+                    //case "l" -> showCommandMenu();
                     default -> menu();
                 }
                 ds.validateWork();
@@ -131,7 +131,9 @@ public class ServiceMain {
             System.out.println("Id Jogador: ");
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             int idJogador = Integer.parseInt(br.readLine());
+
             exe.totalPontosJogador(idJogador);
+
             System.out.println("---- Total Pontos Jogador ----");
         } catch (Exception e) {
             e.printStackTrace();
@@ -144,7 +146,9 @@ public class ServiceMain {
             System.out.println("Id Jogador: ");
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             int idJogador = Integer.parseInt(br.readLine());
+
             exe.totalJogosJogador(idJogador);
+
             System.out.println("---- Total Jogos Jogador ----");
         } catch (Exception e) {
             e.printStackTrace();
@@ -153,9 +157,17 @@ public class ServiceMain {
 
     //TODO
     private static void pontosJogoPorJogadorOption() {
-        System.out.println("---- Pontos Jogo Por Jogador ----");
+        try {
+            System.out.println("---- Pontos Jogo Por Jogador ----");
+            System.out.println("Id Jogo: ");
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            String idJogo = br.readLine();
 
-
+            exe.pontosJogoPorJogador(idJogo);
+            System.out.println("---- Pontos Jogo Por Jogador ----");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private static void associarCrachaOption() {
@@ -168,8 +180,9 @@ public class ServiceMain {
             String idJogo = br.readLine();
             System.out.println("Nome Cracha: ");
             String nomeCracha = br.readLine();
-            exe.associarCracha(idJogador, idJogo, nomeCracha);
 
+            exe.associarCracha(idJogador, idJogo, nomeCracha);
+            System.out.println("---- Associar Cracha ----");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -188,11 +201,11 @@ public class ServiceMain {
             int idConversa = Integer.parseInt(br.readLine());
 
             exe.iniciarConversa(idJogador, nomeConversa, idConversa);
-
+            System.out.println("---- Iniciar Conversa ----");
         } catch (Exception e) {
             e.printStackTrace();
         }
-        }
+    }
 
     private static void juntarConversaOption() {
         try {
@@ -203,9 +216,8 @@ public class ServiceMain {
             System.out.println("Id Conversa: ");
             int idConversa = Integer.parseInt(br.readLine());
 
-
             exe.juntarConversa(idJogador, idConversa);
-
+            System.out.println("---- Juntar Conversa ----");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -223,7 +235,7 @@ public class ServiceMain {
             String textoMensagem = br.readLine();
 
             exe.enviarMensagem(idConversa, idJogador, textoMensagem);
-
+            System.out.println("---- Enviar Mensagem ----");
         } catch (Exception e) {
             e.printStackTrace();
         }

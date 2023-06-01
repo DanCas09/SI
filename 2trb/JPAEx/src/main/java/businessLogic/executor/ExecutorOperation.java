@@ -63,6 +63,14 @@ public class ExecutorOperation  {
         exe.execute(args, functionName);
     }
 
+    @Function
+    public void pontosJogoPorJogador(String idJogo) throws Exception {
+        Object[] args = { idJogo };
+        String functionName = "totalPontosJogador";
+        register.registerPontosJogoPorJogadorFunction();
+        exe.execute(args, functionName);
+    }
+
     @Procedure
     public void associarCracha(int idJogador, String idJogo, String nomeCracha) throws Exception {
         Object[] args = { idJogador, idJogo, nomeCracha };
