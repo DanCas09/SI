@@ -2,7 +2,7 @@ package concrete;
 
 import concrete.interfaces.IMapper;
 import jakarta.persistence.EntityManager;
-import businessLogic.scopes.DataScope;
+import scopes.DataScope;
 
 import java.lang.reflect.Method;
 

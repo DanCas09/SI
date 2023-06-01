@@ -4,8 +4,9 @@ import concrete.interfaces.IMapper;
 import concrete.interfaces.IRepository;
 
 import jakarta.persistence.EntityManager;
-import businessLogic.scopes.DataScope;
+import scopes.DataScope;
 
+import java.lang.reflect.Method;
 import java.util.List;
 
 public class GenericRepository<Tentity, Tkey> implements IRepository<Tentity, Tkey> {
@@ -82,4 +83,21 @@ public class GenericRepository<Tentity, Tkey> implements IRepository<Tentity, Tk
             throw e;
         }
     }
+
+
+//    public String getNameById() throws Exception {
+//        try (DataScope ds = new DataScope()) {
+//            EntityManager em = ds.getEntityManager();
+//            String entityName = entityClass.getSimpleName();
+//            List<Tentity> l = em.createQuery("select e from " + entityName + " e", entityClass)
+//                    .getResultList();
+//            for (Tentity e : l) {
+//                Method m = entityClass.getMethod("getNome");
+//                return (String) m.invoke(e);
+//            }
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//            throw e;
+//        }
+//    }
 }

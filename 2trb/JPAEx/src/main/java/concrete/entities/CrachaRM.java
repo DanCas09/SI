@@ -1,4 +1,4 @@
-package businessLogic.register.entities;
+package concrete.entities;
 
 import concrete.interfaces.IRepository;
 import model.Cracha;

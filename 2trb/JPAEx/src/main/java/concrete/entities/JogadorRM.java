@@ -1,4 +1,4 @@
-package businessLogic.register.entities;
+package concrete.entities;
 
 import model.Jogador;
 import model.Regiao;

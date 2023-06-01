@@ -4,5 +4,5 @@ import jakarta.persistence.EntityManager;
 
 public interface Executor {
 
-    void execute(Object[] args, String functionName) throws Exception;
+    Object execute(Object[] args, String functionName) throws Exception;
 }

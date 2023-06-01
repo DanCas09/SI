@@ -1,8 +1,8 @@
 package presentation;
 
-import businessLogic.register.entities.CrachaRM;
-import businessLogic.register.entities.JogadorRM;
+import concrete.entities.JogadorRM;
 import concrete.GenericRepository;
+import concrete.operations.RepoProcedures;
 import model.Cracha;
 import model.Jogador;
 import model.Jogo;
@@ -19,15 +19,17 @@ public class RepoMapperMain {
             Jogador jogador = new JogadorRM("koff@gmail.com", "koff", "Ativo", "Lisboa").createJogador();
 
 //            System.out.println("------READ-----");
-            Jogador jogador1 = genericJogador.Find(49);
-            System.out.println(jogador1);
+//            Jogador jogador1 = genericJogador.Find(49);
+//            System.out.println(jogador1);
+
+            RepoProcedures.associarCracha(66, "jg1", "Fantasma Branco");
 
 //            System.out.println("------CREATE-----");
 //            genericJogador.Add(jogador);
 //
 //
-            System.out.println("------DELETE-----");
-            genericJogador.Delete(jogador1);
+//            System.out.println("------DELETE-----");
+//            genericJogador.Delete(jogador1);
 //
 //            System.out.println("------UPDATE-----");
 //            String newEmail = "changed@gmail.com";

@@ -26,11 +26,20 @@ public class Cracha {
     @Column(name = "image_url", nullable = false)
     private String imageUrl;
 
+    // How do i add a cracha to a jogador?
+    // i don't want a link
+    // i want to add a cracha to a jogador
     @ManyToMany
     @JoinTable(name = "crachas_jogador",
             joinColumns = @JoinColumn(name = "id_cracha"),
             inverseJoinColumns = @JoinColumn(name = "id_jogador"))
     private Set<Jogador> crachas_jogador = new LinkedHashSet<>();
+
+    // How do i update the crachas_jogador table into the database?
+    // i want to add a cracha to a jogador
+    public void addCrachas_jogador(Jogador jogador) {
+        crachas_jogador.add(jogador);
+    }
 
     public Integer getId() {
         return id;

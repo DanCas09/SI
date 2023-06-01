@@ -2,8 +2,7 @@ package presentation;
 
 import businessLogic.executor.ExecutorOperation;
 import jakarta.persistence.EntityManager;
-import businessLogic.scopes.DataScope;
-
+import scopes.DataScope;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;

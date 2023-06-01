@@ -1,8 +1,8 @@
 package businessLogic.executor;
 
 import businessLogic.register.RegisterDB;
-import interfaces.Function;
-import interfaces.Procedure;
+import businessLogic.annotations.Function;
+import businessLogic.annotations.Procedure;
 import jakarta.persistence.EntityManager;
 
 public class ExecutorOperation  {
@@ -56,11 +56,11 @@ public class ExecutorOperation  {
 
     // Total de Pontos do Jogador - dbo.totalPontosJogador
     @Function
-    public void totalPontosJogador(int idJogador) throws Exception {
+    public int totalPontosJogador(int idJogador) throws Exception {
         Object[] args = { idJogador };
         String functionName = "totalPontosJogador";
         register.registerTotalPontosJogadorFunction();
-        exe.execute(args, functionName);
+        return (int) exe.execute(args, functionName);
     }
 
     @Function
