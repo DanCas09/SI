@@ -65,7 +65,7 @@ BEGIN
 END;
 $$;
 
-CREATE OR REPLACE PROCEDURE dbo.iniciarConversa (
+CREATE OR REPLACE PROCEDURE dbo.iniciarConversaProcedure (
 	IN id_jogador INTEGER, 
 	IN nome_conversa VARCHAR(255),
 	OUT id_conversa INTEGER)
@@ -79,14 +79,22 @@ BEGIN
 END;
 $$;
 
-DO $$
+
+CREATE OR REPLACE FUNCTION dbo.iniciarConversa(
+    id_jogador INTEGER,
+    nome_conversa VARCHAR(255)
+) RETURNS INTEGER
+LANGUAGE plpgsql
+AS $$
 DECLARE
     id_conversa INTEGER;
 BEGIN
     -- Calls the iniciarConversa procedure to initiate a conversation
-    CALL dbo.iniciarConversa(1, 'Conversa', id_conversa); 
-    
-    -- Prints the conversation id
-    RAISE NOTICE 'A conversa foi iniciada com o id %', id_conversa;
+    CALL dbo.iniciarConversaProcedure(id_jogador, nome_conversa, id_conversa);
+	
+	RAISE NOTICE 'A conversa foi iniciada com o id %', id_conversa;
+
+    -- Returns the conversation id
+    RETURN id_conversa;
 END;
 $$;
