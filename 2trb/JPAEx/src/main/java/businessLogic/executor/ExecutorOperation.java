@@ -78,10 +78,11 @@ public class ExecutorOperation  {
         exe.execute(args, functionName);
     }
 
-    @Procedure
-    public void iniciarConversa(int idJogador, String nomeConversa, int idConversa) throws Exception {
-        Object[] args = { idJogador, nomeConversa, idConversa };
+    @Function
+    public void iniciarConversa(int idJogador, String nomeConversa) throws Exception {
+        Object[] args = { idJogador, nomeConversa };
         String functionName = "iniciarConversa";
+        register.iniciarConversaFunction();
         exe.execute(args, functionName);
     }
 

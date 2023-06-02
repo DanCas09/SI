@@ -30,7 +30,7 @@ public class ServiceMain {
                 "5 -> (f) : totalJogosJogador\n" +
                 "6 -> (g) : pontosJogoPorJogador (TODO)\n" +
                 "7 -> (h) : associarCracha\n" +
-                "8 -> (i) : iniciarConversa (TODO)\n" +
+                "8 -> (i) : iniciarConversa\n" +
                 "9 -> (j) : juntarConversa\n" +
                 "10 -> (k) : enviarMensagem\n" +
                 "11 -> (l) : jogadorTotalInfo (TODO)\n" +
@@ -196,10 +196,8 @@ public class ServiceMain {
             int idJogador = Integer.parseInt(br.readLine());
             System.out.println("Nome Conversa: ");
             String nomeConversa = br.readLine();
-            System.out.println("Id Conversa: ");
-            int idConversa = Integer.parseInt(br.readLine());
 
-            exe.iniciarConversa(idJogador, nomeConversa, idConversa);
+            exe.iniciarConversa(idJogador, nomeConversa);
             System.out.println("---- Iniciar Conversa ----");
         } catch (Exception e) {
             e.printStackTrace();
