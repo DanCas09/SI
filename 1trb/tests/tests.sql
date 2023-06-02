@@ -323,7 +323,9 @@ BEGIN
 	WHERE dbo.Conversa.id = id_conversa_param;
 	
     -- Chama o procedimento iniciado de forma a inciar uma conversa
-    CALL dbo.iniciarConversa(id_jogador_param, 'Conversa iniciada', id_conversa_param);
+
+	SELECT dbo.iniciarConversa(id_jogador_param, 'Conversa iniciada') INTO id_conversa_param;
+	
 
     -- Verifica se a conversa foi criada
     IF NOT EXISTS (

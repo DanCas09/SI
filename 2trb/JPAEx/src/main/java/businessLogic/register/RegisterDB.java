@@ -45,4 +45,14 @@ public class RegisterDB {
         Service.registerFunction("dbo.pontosJogoPorJogador", funArgs, em);
     }
 
+    public void iniciarConversaFunction() {
+        ParameterFunction idJogador = new ParameterFunction(Integer.class, ParameterMode.IN);
+        ParameterFunction nomeConversa = new ParameterFunction(String.class, ParameterMode.IN);
+        ParameterFunction idConversa = new ParameterFunction(Integer.class, ParameterMode.OUT);
+
+        ParameterFunction[] funArgs = { idJogador, nomeConversa, idConversa };
+
+        Service.registerFunction("dbo.iniciarConversa", funArgs, em);
+    }
+
 }
