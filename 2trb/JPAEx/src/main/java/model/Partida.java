@@ -2,6 +2,7 @@ package model;
 
 import jakarta.persistence.*;
 
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -19,10 +20,10 @@ public class Partida {
     private Jogo idJogo;
 
     @Column(name = "data_ini", nullable = false)
-    private Instant dataIni;
+    private Timestamp dataIni;
 
     @Column(name = "data_fim")
-    private Instant dataFim;
+    private Timestamp dataFim;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "regiao", nullable = false)
@@ -53,19 +54,19 @@ public class Partida {
         this.idJogo = idJogo;
     }
 
-    public Instant getDataIni() {
+    public Timestamp getDataIni() {
         return dataIni;
     }
 
-    public void setDataIni(Instant dataIni) {
+    public void setDataIni(Timestamp dataIni) {
         this.dataIni = dataIni;
     }
 
-    public Instant getDataFim() {
+    public Timestamp getDataFim() {
         return dataFim;
     }
 
-    public void setDataFim(Instant dataFim) {
+    public void setDataFim(Timestamp dataFim) {
         this.dataFim = dataFim;
     }
 

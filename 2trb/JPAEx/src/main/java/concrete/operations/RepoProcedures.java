@@ -7,14 +7,17 @@ import jakarta.persistence.EntityManager;
 import model.*;
 import scopes.DataScope;
 
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 public class RepoProcedures {
 
     public static void associarCracha(Integer idJogador, String idJogo, String nomeCracha) {
         try (DataScope ds = new DataScope()) {
             EntityManager em = ds.getEntityManager();
-            ExecutorOperation exe = new ExecutorOperation(em);
+
 
             GenericRepository<Jogador, Integer> jogadorRepository = new GenericRepository<>(Jogador.class, Integer.class);
             Jogador jogador = jogadorRepository.Find(idJogador);
@@ -39,16 +42,31 @@ public class RepoProcedures {
                 throw new NoSuchElementException("Jogo não existe");
             }
 
-            int res = exe.totalPontosJogador(jogador.getId());
-            if (res < cracha.getPontuacao()) {
-                throw new Exception("Pontuação insuficiente");
+            GenericRepository<Partida, Integer> partidaRepository = new GenericRepository<>(Partida.class, Integer.class);
+            List<Partida> partidaList = partidaRepository.GetAll();
+
+            List<Partida> partidaJogo = partidaList.stream()
+                    .filter(it -> it.getIdJogo() == jogo && it.getDataFim() != null).toList();
+
+
+            GenericRepository<Pontuacao, PontuacaoId> pontuacaoRepository = new GenericRepository<>(Pontuacao.class, PontuacaoId.class);
+
+            Stream<Pontuacao> pontuacaoList = pontuacaoRepository.GetAll().stream()
+                    .filter(it -> Objects.equals(it.getIdJogador().getId(), jogador.getId()))
+                    .filter(it -> partidaJogo.stream().anyMatch(partida -> partida == it.getIdPartida()));
+
+            int res = pontuacaoList.mapToInt(Pontuacao::getPontuacao).sum();
+            System.out.println(res);
+
+            if (res <= cracha.getPontuacao()) {
+                throw new IllegalArgumentException("Pontuação insuficiente");
             }
 
             GenericRepository<CrachasJogador, CrachasJogadorId> crachasJogadorRepository = new GenericRepository<>(CrachasJogador.class, CrachasJogadorId.class);
             CrachasJogador crachaJogador = new CrachaJogadorRM(jogador, cracha).createCrachaJogador();
             crachasJogadorRepository.Add(crachaJogador);
 
-            ds.cancelWork();
+            ds.validateWork();
         } catch (Exception e) {
             e.printStackTrace();
         }

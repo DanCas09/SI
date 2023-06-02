@@ -1,6 +1,7 @@
 package presentation;
 
 import businessLogic.executor.ExecutorOperation;
+import concrete.operations.RepoProcedures;
 import jakarta.persistence.EntityManager;
 import scopes.DataScope;
 import java.io.BufferedReader;
@@ -34,6 +35,7 @@ public class ServiceMain {
                 "9 -> (j) : juntarConversa\n" +
                 "10 -> (k) : enviarMensagem\n" +
                 "11 -> (l) : jogadorTotalInfo (TODO)\n" +
+                "12 -> (?) : associarCrachaRepoMapper\n" +
                 "exit -> exit\n" +
                 "l -> menu\n" +
                 "\n");
@@ -65,6 +67,7 @@ public class ServiceMain {
                     case "9" -> juntarConversaOption();
                     case "10" -> enviarMensagemOption();
                     case "11" -> jogadorTotalInfoOption();
+                    case "12" -> associarCrachaOptionRepoMapper();
                     //case "l" -> showCommandMenu();
                     default -> menu();
                 }
@@ -171,7 +174,7 @@ public class ServiceMain {
 
     private static void associarCrachaOption() {
         try {
-            System.out.println("---- Associar Cracha ----");
+            System.out.println("---- Associar Cracha SQL ----");
             System.out.println("Id Jogador: ");
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             int idJogador = Integer.parseInt(br.readLine());
@@ -181,7 +184,7 @@ public class ServiceMain {
             String nomeCracha = br.readLine();
 
             exe.associarCracha(idJogador, idJogo, nomeCracha);
-            System.out.println("---- Associar Cracha ----");
+            System.out.println("---- Associar Cracha SQL ----");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -241,6 +244,24 @@ public class ServiceMain {
     //TODO
     private static void jogadorTotalInfoOption() {
 
+    }
+
+    private static void associarCrachaOptionRepoMapper() {
+        try {
+            System.out.println("---- Associar Cracha ----");
+            System.out.println("Id Jogador: ");
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            int idJogador = Integer.parseInt(br.readLine());
+            System.out.println("Id Jogo: ");
+            String idJogo = br.readLine();
+            System.out.println("Nome Cracha: ");
+            String nomeCracha = br.readLine();
+
+            RepoProcedures.associarCracha(idJogador, idJogo, nomeCracha);
+            System.out.println("---- Associar Cracha Repo/Mapper----");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 

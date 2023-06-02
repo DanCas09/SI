@@ -3,9 +3,11 @@ package presentation;
 import concrete.entities.JogadorRM;
 import concrete.GenericRepository;
 import concrete.operations.RepoProcedures;
+import jakarta.persistence.EntityManager;
 import model.Cracha;
 import model.Jogador;
 import model.Jogo;
+import scopes.DataScope;
 
 public class RepoMapperMain {
 
