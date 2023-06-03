@@ -7,4 +7,6 @@ public interface IMapper<T, TId> {
     void update(T e) throws Exception;
 
     void delete(T e) throws Exception;
+
+    void refresh(T cracha) throws Exception;
 }

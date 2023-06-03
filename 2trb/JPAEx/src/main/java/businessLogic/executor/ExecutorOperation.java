@@ -56,11 +56,11 @@ public class ExecutorOperation  {
 
     // Total de Pontos do Jogador - dbo.totalPontosJogador
     @Function
-    public int totalPontosJogador(int idJogador) throws Exception {
+    public void totalPontosJogador(int idJogador) throws Exception {
         Object[] args = { idJogador };
         String functionName = "totalPontosJogador";
         register.registerTotalPontosJogadorFunction();
-        return (int) exe.execute(args, functionName);
+        exe.execute(args, functionName);
     }
 
     @Function(returnsMultipleValues = true)

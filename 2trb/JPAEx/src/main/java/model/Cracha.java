@@ -8,6 +8,11 @@ import java.util.Set;
 @Entity
 @Table(name = "cracha", schema = "dbo")
 public class Cracha {
+
+    @Version
+    @Column(name = "version")
+    private int version;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -29,17 +34,17 @@ public class Cracha {
     // How do i add a cracha to a jogador?
     // i don't want a link
     // i want to add a cracha to a jogador
-    @ManyToMany
-    @JoinTable(name = "crachas_jogador",
-            joinColumns = @JoinColumn(name = "id_cracha"),
-            inverseJoinColumns = @JoinColumn(name = "id_jogador"))
-    private Set<Jogador> crachas_jogador = new LinkedHashSet<>();
+//    @ManyToMany
+//    @JoinTable(name = "crachas_jogador",
+//            joinColumns = @JoinColumn(name = "id_cracha"),
+//            inverseJoinColumns = @JoinColumn(name = "id_jogador"))
+//    private Set<Jogador> crachas_jogador = new LinkedHashSet<>();
 
     // How do i update the crachas_jogador table into the database?
     // i want to add a cracha to a jogador
-    public void addCrachas_jogador(Jogador jogador) {
-        crachas_jogador.add(jogador);
-    }
+//    public void addCrachas_jogador(Jogador jogador) {
+//        crachas_jogador.add(jogador);
+//    }
 
     public Integer getId() {
         return id;
@@ -89,4 +94,7 @@ public class Cracha {
                 "imageUrl: " + imageUrl + "\n";
     }
 
+    public void increasePointsByTwentyPercent() {
+        this.pontuacao = (int) (this.pontuacao * 1.2);
+    }
 }

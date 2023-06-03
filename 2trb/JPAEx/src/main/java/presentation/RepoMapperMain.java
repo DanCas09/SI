@@ -16,15 +16,16 @@ public class RepoMapperMain {
         GenericRepository<Jogador, Integer> genericJogador = new GenericRepository<>(Jogador.class, Integer.class);
         GenericRepository<Cracha, Integer> genericCracha = new GenericRepository<>(Cracha.class, Integer.class);
         GenericRepository<Jogo, String> genericJogo = new GenericRepository<>(Jogo.class, String.class);
-        try {
+        try (DataScope ds = new DataScope()) {
             // Can you create an example of Jogador to test the method add and delete?
             Jogador jogador = new JogadorRM("koff@gmail.com", "koff", "Ativo", "Lisboa").createJogador();
 
+            RepoProcedures.crachaIncreasePoints("jg1", "Fantasma Preto");
 //            System.out.println("------READ-----");
 //            Jogador jogador1 = genericJogador.Find(49);
 //            System.out.println(jogador1);
 
-            RepoProcedures.associarCracha(66, "jg1", "Fantasma Branco");
+ //           RepoProcedures.associarCracha(66, "jg1", "Fantasma Branco");
 
 //            System.out.println("------CREATE-----");
 //            genericJogador.Add(jogador);
@@ -52,7 +53,7 @@ public class RepoMapperMain {
 //
 //            Cracha cracha = new CrachaRM(jogo, "NOVO CRACHA", 100, "https://www.google.com").createCracha();
 //            genericCracha.Add(cracha);
-
+        ds.validateWork();
         } catch (Exception e) {
             e.printStackTrace();
         }

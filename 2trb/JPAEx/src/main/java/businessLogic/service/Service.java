@@ -39,7 +39,6 @@ public class Service {
                 f.registerStoredProcedureParameter(i + 1, funArgs[i].classParameter(), funArgs[i].mode());
             }
         currentFunction = f;
-
     }
 
     // check this implementation

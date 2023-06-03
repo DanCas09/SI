@@ -71,6 +71,18 @@ public class GenericMapper<T, TId> implements IMapper<T, TId> {
         }
     }
 
+    @Override
+    public void refresh(T cracha) throws Exception {
+        try (DataScope ds = new DataScope()) {
+            EntityManager em = ds.getEntityManager();
+            em.refresh(cracha);
+            ds.validateWork();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            throw e;
+        }
+    }
+
     private TId extractId(T e) {
         try {
             Method idGetter = entityClass.getMethod("getId");
@@ -80,4 +92,6 @@ public class GenericMapper<T, TId> implements IMapper<T, TId> {
             return null;
         }
     }
+
+
 }

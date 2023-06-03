@@ -9,4 +9,5 @@ public interface IRepository<Tentity,Tkey> {
     void Add(Tentity entity) throws Exception;
     void Delete(Tentity entity) throws Exception;
     void Save(Tentity e) throws Exception;
+    void Refresh(Tentity cracha) throws Exception;
 }
