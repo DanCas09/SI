@@ -60,7 +60,8 @@ CREATE TABLE dbo.Cracha (
   id_jogo VARCHAR(10) NOT NULL REFERENCES dbo.Jogo (id) ON DELETE CASCADE,
   nome VARCHAR(255) UNIQUE NOT NULL,
   pontuacao INTEGER NOT NULL,
-  image_url VARCHAR(255) NOT NULL
+  image_url VARCHAR(255) NOT NULL,
+  version INTEGER
 );
 
 CREATE TABLE dbo.Crachas_jogador (
