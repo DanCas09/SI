@@ -28,6 +28,7 @@ public class GenericRepository<Tentity, Tkey> implements IRepository<Tentity, Tk
             String entityName = entityClass.getSimpleName();
             List<Tentity> l = em.createQuery("select e from " + entityName + " e", entityClass)
                     .getResultList();
+            ds.validateWork();
             return l;
         } catch (Exception e) {
             System.out.println(e.getMessage());

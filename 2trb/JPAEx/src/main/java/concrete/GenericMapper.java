@@ -35,6 +35,7 @@ public class GenericMapper<T, TId> implements IMapper<T, TId> {
     public T read(TId id) throws Exception {
         try (DataScope ds = new DataScope()) {
             EntityManager em = ds.getEntityManager();
+            ds.validateWork();
             return em.find(entityClass, id);
         } catch (Exception e) {
             System.out.println(e.getMessage());
