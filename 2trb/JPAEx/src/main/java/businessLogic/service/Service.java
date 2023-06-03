@@ -50,4 +50,11 @@ public class Service {
         currentFunction.execute();
         return currentFunction.getOutputParameterValue(args.length + 1);
     }
+
+    public static Object[] executeReturnsMultipleValuesFunction(String procName, Object[] args ) {
+        for (int i = 0; i < args.length; i++) {
+            currentFunction.setParameter(i + 1, args[i]);
+        }
+        return currentFunction.getResultList().toArray();
+    }
 }

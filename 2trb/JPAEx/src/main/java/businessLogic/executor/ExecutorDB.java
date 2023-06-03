@@ -33,7 +33,10 @@ public class ExecutorDB implements Executor {
 
         // Verify if function or procedure then execute
         if (m.isPresent() && m.get().isAnnotationPresent(Function.class)) {
-            return executeFunction(functionCanonicalName, args);
+            if (m.get().getAnnotation(Function.class).returnsMultipleValues())
+                return executeReturnsMultipleValuesFunction(functionCanonicalName, args);
+            else
+                return executeFunction(functionCanonicalName, args);
         }
         else executeProc(functionCanonicalName, args);
         return null;
@@ -42,6 +45,12 @@ public class ExecutorDB implements Executor {
     private Object executeFunction(String functionName, Object[] args) {
         Object result = Service.executeFunction(functionName, args);
         System.out.println("Function " + functionName + " executed with result: " + result);
+        return result;
+    }
+
+    private Object executeReturnsMultipleValuesFunction(String functionName, Object[] args) {
+        Object[] result = Service.executeReturnsMultipleValuesFunction(functionName, args);
+        System.out.println("Function " + functionName + " executed with result: " + Arrays.toString(result));
         return result;
     }
 
