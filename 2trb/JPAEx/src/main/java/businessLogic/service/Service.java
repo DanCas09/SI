@@ -1,16 +1,12 @@
 package businessLogic.service;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Query;
-import jakarta.persistence.StoredProcedureQuery;
+import jakarta.persistence.*;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 
 public class Service {
-    private static StoredProcedureQuery currentFunction;
+    private static Query currentFunction;
 
     public static void executeProcedure(String procedureName, Object[] args, EntityManager em) {
         Query q = em.createNativeQuery("call " + procedureName + prepareArgs(args));
@@ -34,26 +30,31 @@ public class Service {
     }
 
     public static void registerFunction(String funName, ParameterFunction[] funArgs, EntityManager em) {
-        StoredProcedureQuery f = em.createStoredProcedureQuery(funName);
-            for (int i = 0; i < funArgs.length; i++) {
-                f.registerStoredProcedureParameter(i + 1, funArgs[i].classParameter(), funArgs[i].mode());
+        String[] placeholders = createPlaceholders(funArgs);
+        Query q = em.createNativeQuery("SELECT " + funName + prepareArgs(placeholders));
+
+        for (int i = 0; i < funArgs.length; i++) {
+            q.setParameter(i + 1, funArgs[i].classParameter());
+        }
+        currentFunction =  q;
+    }
+
+    private static String[] createPlaceholders(ParameterFunction[] funArgs) {
+        List<String> placeholders = new ArrayList<>();
+        for (int i = 0; i < funArgs.length; i++) {
+            if (funArgs[i].mode() == ParameterMode.IN) {
+                placeholders.add("(?)");
             }
-        currentFunction = f;
+        }
+        return placeholders.toArray(new String[0]);
     }
 
     // check this implementation
-    public static Object executeFunction(String procName, Object[] args ) {
+    public static List executeFunction(Object[] args ) {
         for (int i = 0; i < args.length; i++) {
             currentFunction.setParameter(i + 1, args[i]);
         }
-        currentFunction.execute();
-        return currentFunction.getOutputParameterValue(args.length + 1);
-    }
+        return currentFunction.getResultList();
 
-    public static Object[] executeReturnsMultipleValuesFunction(String procName, Object[] args ) {
-        for (int i = 0; i < args.length; i++) {
-            currentFunction.setParameter(i + 1, args[i]);
-        }
-        return currentFunction.getResultList().toArray();
     }
 }

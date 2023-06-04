@@ -63,10 +63,10 @@ public class ExecutorOperation  {
         exe.execute(args, functionName);
     }
 
-    @Function(returnsMultipleValues = true)
+    @Function()
     public void pontosJogoPorJogador(String idJogo) throws Exception {
         Object[] args = { idJogo };
-        String functionName = "totalPontosJogador";
+        String functionName = "pontosJogoPorJogador";
         register.registerPontosJogoPorJogadorFunction();
         exe.execute(args, functionName);
     }

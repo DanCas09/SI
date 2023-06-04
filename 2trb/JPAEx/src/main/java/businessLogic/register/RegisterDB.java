@@ -7,6 +7,8 @@ import businessLogic.service.ParameterFunction;
 import businessLogic.service.Service;
 import model.Regiao;
 
+import java.util.List;
+
 public class RegisterDB {
 
     EntityManager em;
@@ -18,30 +20,20 @@ public class RegisterDB {
 
     public void registerTotalJogosJogadorFunction() throws Exception {
         ParameterFunction idJogador = new ParameterFunction(Integer.class, ParameterMode.IN);
-        ParameterFunction totalJogosParameter = new ParameterFunction(Integer.class, ParameterMode.OUT);
-
-        ParameterFunction[] funArgs = { idJogador, totalJogosParameter };
-
+        ParameterFunction[] funArgs = { idJogador };
         Service.registerFunction("dbo.totalJogosJogador", funArgs, em);
     }
 
     public void registerTotalPontosJogadorFunction() throws Exception {
         ParameterFunction idJogador = new ParameterFunction(Integer.class, ParameterMode.IN);
-        ParameterFunction totalPontosParameter = new ParameterFunction(Integer.class, ParameterMode.OUT);
-
-        ParameterFunction[] funArgs = { idJogador, totalPontosParameter };
-
+        ParameterFunction[] funArgs = { idJogador };
         Service.registerFunction("dbo.totalPontosJogador", funArgs, em);
     }
 
 
-    // ISTO ESTÁ MAL
     public void registerPontosJogoPorJogadorFunction() {
         ParameterFunction idJogo = new ParameterFunction(String.class, ParameterMode.IN);
-        ParameterFunction pontosParameter = new ParameterFunction(Integer.class, ParameterMode.OUT);
-
-        ParameterFunction[] funArgs = { idJogo, pontosParameter };
-
+        ParameterFunction[] funArgs = { idJogo};
         Service.registerFunction("dbo.pontosJogoPorJogador", funArgs, em);
     }
 

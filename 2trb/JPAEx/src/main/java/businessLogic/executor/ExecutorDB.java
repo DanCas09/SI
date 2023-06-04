@@ -7,6 +7,7 @@ import jakarta.persistence.EntityManager;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 public class ExecutorDB implements Executor {
@@ -33,26 +34,33 @@ public class ExecutorDB implements Executor {
 
         // Verify if function or procedure then execute
         if (m.isPresent() && m.get().isAnnotationPresent(Function.class)) {
-            if (m.get().getAnnotation(Function.class).returnsMultipleValues())
-                return executeReturnsMultipleValuesFunction(functionCanonicalName, args);
-            else
-                return executeFunction(functionCanonicalName, args);
+                return executeFunction(args);
         }
         else executeProc(functionCanonicalName, args);
         return null;
     }
 
-    private Object executeFunction(String functionName, Object[] args) {
-        Object result = Service.executeFunction(functionName, args);
-        System.out.println("Function " + functionName + " executed with result: " + result);
-        return result;
+    private Object executeFunction(Object[] args) {
+        List results = Service.executeFunction(args);
+        displayResults(results);
+        return results;
     }
 
-    private Object executeReturnsMultipleValuesFunction(String functionName, Object[] args) {
-        Object[] result = Service.executeReturnsMultipleValuesFunction(functionName, args);
-        System.out.println("Function " + functionName + " executed with result: " + Arrays.toString(result));
-        return result;
+    private void displayResults(List results) {
+        if (results.isEmpty()) {
+            System.out.println("No results found.");
+            return;
+        }
+
+        System.out.println("\nResults:\n");
+        for (int i = 0; i < results.size(); i++) {
+            String str =  results.get(i).toString();
+            System.out.println(str.replaceAll("[,()]", " "));
+        }
+        System.out.println("\n");
     }
+
+
 
     private void executeProc(String procName, Object[] args) throws Exception {
         Service.executeProcedure(procName, args, em);

@@ -34,7 +34,7 @@ public class ServiceMain {
                 "8 -> (i) : iniciarConversa\n" +
                 "9 -> (j) : juntarConversa\n" +
                 "10 -> (k) : enviarMensagem\n" +
-                "11 -> (l) : jogadorTotalInfo (TODO)\n" +
+                "11 -> (l) : jogadorTotalInfo\n" +
                 "12 -> (?) : associarCrachaRepoMapper\n" +
                 "exit -> exit\n" +
                 "l -> menu\n" +
