@@ -29,12 +29,12 @@ public class ServiceMain {
                 "3 -> (d) : banirJogador\n" +
                 "4 -> (e) : totalPontosJogador\n" +
                 "5 -> (f) : totalJogosJogador\n" +
-                "6 -> (g) : pontosJogoPorJogador (TODO)\n" +
+                "6 -> (g) : pontosJogoPorJogador\n" +
                 "7 -> (h) : associarCracha\n" +
                 "8 -> (i) : iniciarConversa\n" +
                 "9 -> (j) : juntarConversa\n" +
                 "10 -> (k) : enviarMensagem\n" +
-                "11 -> (l) : jogadorTotalInfo\n" +
+                "11 -> (l) : jogadorTotalInfo (TODO)\n" +
                 "12 -> (?) : associarCrachaRepoMapper\n" +
                 "exit -> exit\n" +
                 "l -> menu\n" +
