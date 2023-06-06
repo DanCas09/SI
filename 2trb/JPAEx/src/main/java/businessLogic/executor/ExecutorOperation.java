@@ -1,5 +1,6 @@
 package businessLogic.executor;
 
+import businessLogic.annotations.View;
 import businessLogic.register.RegisterDB;
 import businessLogic.annotations.Function;
 import businessLogic.annotations.Procedure;
@@ -98,5 +99,12 @@ public class ExecutorOperation  {
         Object[] args = { idConversa, idJogador, textoMensagem };
         String functionName = "enviarMensagem";
         exe.execute(args, functionName);
+    }
+
+    @View
+    public void jogadorTotalInfo() throws Exception {
+        String functionName = "jogadorTotalInfo";
+        register.jogadorTotalInfoView();
+        exe.execute(new Object[0], functionName);
     }
 }

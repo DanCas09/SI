@@ -1,6 +1,7 @@
 package businessLogic.service;
 
 import jakarta.persistence.*;
+import model.JogadorTotalInfo;
 
 import java.util.*;
 
@@ -32,11 +33,16 @@ public class Service {
     public static void registerFunction(String funName, ParameterFunction[] funArgs, EntityManager em) {
         String[] placeholders = createPlaceholders(funArgs);
         Query q = em.createNativeQuery("SELECT " + funName + prepareArgs(placeholders));
+        //Query q = em.createNativeQuery("SELECT id, num_partidas  FROM dbo.jogadorTotalInfo ");
 
         for (int i = 0; i < funArgs.length; i++) {
             q.setParameter(i + 1, funArgs[i].classParameter());
         }
         currentFunction =  q;
+    }
+
+    public static void registerView(EntityManager em) {
+        currentFunction = em.createQuery("select jg  from JogadorTotalInfo jg", JogadorTotalInfo.class);
     }
 
     private static String[] createPlaceholders(ParameterFunction[] funArgs) {
@@ -50,11 +56,16 @@ public class Service {
     }
 
     // check this implementation
-    public static List executeFunction(Object[] args ) {
+    public static List<JogadorTotalInfo> executeFunction(Object[] args ) {
         for (int i = 0; i < args.length; i++) {
             currentFunction.setParameter(i + 1, args[i]);
         }
         return currentFunction.getResultList();
 
     }
+
+    public static List executeView() {
+        return currentFunction.getResultList();
+    }
+
 }

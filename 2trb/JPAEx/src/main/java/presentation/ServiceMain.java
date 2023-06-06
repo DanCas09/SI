@@ -34,7 +34,7 @@ public class ServiceMain {
                 "8 -> (i) : iniciarConversa\n" +
                 "9 -> (j) : juntarConversa\n" +
                 "10 -> (k) : enviarMensagem\n" +
-                "11 -> (l) : jogadorTotalInfo (TODO)\n" +
+                "11 -> (l) : jogadorTotalInfo\n" +
                 "12 -> (?) : associarCrachaRepoMapper\n" +
                 "exit -> exit\n" +
                 "l -> menu\n" +
@@ -243,7 +243,13 @@ public class ServiceMain {
 
     //TODO
     private static void jogadorTotalInfoOption() {
-
+        try {
+            System.out.println("---- Jogador Total Info ----");
+            exe.jogadorTotalInfo();
+            System.out.println("---- Jogador Total Info ----");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private static void associarCrachaOptionRepoMapper() {

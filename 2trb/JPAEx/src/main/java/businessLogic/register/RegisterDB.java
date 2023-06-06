@@ -47,4 +47,8 @@ public class RegisterDB {
         Service.registerFunction("dbo.iniciarConversa", funArgs, em);
     }
 
+    public void jogadorTotalInfoView() {
+        Service.registerView(em);
+    }
+
 }
