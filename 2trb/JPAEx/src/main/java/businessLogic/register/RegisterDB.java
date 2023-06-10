@@ -18,13 +18,13 @@ public class RegisterDB {
         this.em = em;
     }
 
-    public void registerTotalJogosJogadorFunction() throws Exception {
+    public void registerTotalJogosJogadorFunction() {
         ParameterFunction idJogador = new ParameterFunction(Integer.class, ParameterMode.IN);
         ParameterFunction[] funArgs = { idJogador };
         Service.registerFunction("dbo.totalJogosJogador", funArgs, em);
     }
 
-    public void registerTotalPontosJogadorFunction() throws Exception {
+    public void registerTotalPontosJogadorFunction() {
         ParameterFunction idJogador = new ParameterFunction(Integer.class, ParameterMode.IN);
         ParameterFunction[] funArgs = { idJogador };
         Service.registerFunction("dbo.totalPontosJogador", funArgs, em);

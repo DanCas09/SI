@@ -18,25 +18,22 @@ public class ExecutorDB implements Executor {
 
     private EntityManager em;
 
-    private RegisterDB register;
-
     public ExecutorDB(EntityManager em) {
         this.em = em;
-        this.register = new RegisterDB(em);
     }
 
     private static final String SCHEMA = "dbo";
 
     @Override
     public Object execute(Object[] args, String functionName) throws Exception {
-        return registerAndExecuteMethod(functionName, args);
+        return executeMethod(functionName, args);
     }
 
-    private Object registerAndExecuteMethod(String functionName, Object[] args) throws Exception {
+    private Object executeMethod(String functionName, Object[] args) throws Exception {
         String functionCanonicalName = SCHEMA + "." + functionName;
         Optional<Method> m = Arrays.stream(ExecutorOperation.class.getMethods()).filter(it->it.getName().equals(functionName)).findFirst();
 
-        // Verify if function or procedure then execute
+        // Verify if function, procedure or view then execute
         if (m.isPresent() && m.get().isAnnotationPresent(Function.class)) {
                 return executeFunction(args);
         } else if (m.isPresent() && m.get().isAnnotationPresent(View.class)){
