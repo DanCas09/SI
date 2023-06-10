@@ -9,10 +9,6 @@ import java.util.Set;
 @Table(name = "cracha", schema = "dbo")
 public class Cracha {
 
-    @Version
-    @Column(name = "version")
-    private int version;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -30,6 +26,10 @@ public class Cracha {
 
     @Column(name = "image_url", nullable = false)
     private String imageUrl;
+
+    @Version
+    @Column(name = "version")
+    private int version = 0;
 
     // How do i add a cracha to a jogador?
     // i don't want a link
@@ -80,6 +80,14 @@ public class Cracha {
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 
     public void setImageUrl(String imageUrl) {

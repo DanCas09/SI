@@ -3,7 +3,7 @@ package presentation;
 import concrete.entities.JogadorRM;
 import concrete.GenericRepository;
 import concrete.operations.RepoProcedures;
-import jakarta.persistence.EntityManager;
+import jakarta.persistence.LockModeType;
 import model.Cracha;
 import model.Jogador;
 import model.Jogo;
@@ -11,16 +11,19 @@ import scopes.DataScope;
 
 public class RepoMapperMain {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
         GenericRepository<Jogador, Integer> genericJogador = new GenericRepository<>(Jogador.class, Integer.class);
         GenericRepository<Cracha, Integer> genericCracha = new GenericRepository<>(Cracha.class, Integer.class);
         GenericRepository<Jogo, String> genericJogo = new GenericRepository<>(Jogo.class, String.class);
         try (DataScope ds = new DataScope()) {
+
+
             // Can you create an example of Jogador to test the method add and delete?
             Jogador jogador = new JogadorRM("koff@gmail.com", "koff", "Ativo", "Lisboa").createJogador();
 
-            RepoProcedures.crachaIncreasePoints("jg1", "Fantasma Preto");
+           // RepoProcedures.crachaIncreasePoints("jg1", "Fantasma Preto", LockModeType.OPTIMISTIC_FORCE_INCREMENT);
+            RepoProcedures.crachaIncreasePoints("jg1", "Fantasma Preto", LockModeType.PESSIMISTIC_FORCE_INCREMENT);
 //            System.out.println("------READ-----");
 //            Jogador jogador1 = genericJogador.Find(49);
 //            System.out.println(jogador1);
@@ -53,9 +56,11 @@ public class RepoMapperMain {
 //
 //            Cracha cracha = new CrachaRM(jogo, "NOVO CRACHA", 100, "https://www.google.com").createCracha();
 //            genericCracha.Add(cracha);
-        ds.validateWork();
+            ds.validateWork();
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
+            throw e;
         }
+
     }
 }
