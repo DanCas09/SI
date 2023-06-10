@@ -97,19 +97,4 @@ public class GenericRepository<Tentity, Tkey> implements IRepository<Tentity, Tk
         }
     }
 
-    //    public String getNameById() throws Exception {
-//        try (DataScope ds = new DataScope()) {
-//            EntityManager em = ds.getEntityManager();
-//            String entityName = entityClass.getSimpleName();
-//            List<Tentity> l = em.createQuery("select e from " + entityName + " e", entityClass)
-//                    .getResultList();
-//            for (Tentity e : l) {
-//                Method m = entityClass.getMethod("getNome");
-//                return (String) m.invoke(e);
-//            }
-//        } catch (Exception e) {
-//            System.out.println(e.getMessage());
-//            throw e;
-//        }
-//    }
 }

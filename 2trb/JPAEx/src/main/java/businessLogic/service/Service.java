@@ -33,7 +33,6 @@ public class Service {
     public static void registerFunction(String funName, ParameterFunction[] funArgs, EntityManager em) {
         String[] placeholders = createPlaceholders(funArgs);
         Query q = em.createNativeQuery("SELECT " + funName + prepareArgs(placeholders));
-        //Query q = em.createNativeQuery("SELECT id, num_partidas  FROM dbo.jogadorTotalInfo ");
 
         for (int i = 0; i < funArgs.length; i++) {
             q.setParameter(i + 1, funArgs[i].classParameter());
