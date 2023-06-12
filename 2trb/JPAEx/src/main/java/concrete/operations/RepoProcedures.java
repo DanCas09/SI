@@ -1,6 +1,5 @@
 package concrete.operations;
 
-import businessLogic.executor.ExecutorOperation;
 import concrete.GenericRepository;
 import concrete.entities.CrachaJogadorRM;
 import jakarta.persistence.*;
@@ -16,9 +15,6 @@ public class RepoProcedures {
 
     public static void associarCracha(Integer idJogador, String idJogo, String nomeCracha) {
         try (DataScope ds = new DataScope()) {
-            EntityManager em = ds.getEntityManager();
-
-
             GenericRepository<Jogador, Integer> jogadorRepository = new GenericRepository<>(Jogador.class, Integer.class);
             Jogador jogador = jogadorRepository.Find(idJogador);
             if (jogador == null) {

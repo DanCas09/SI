@@ -2,6 +2,8 @@ package model;
 
 import jakarta.persistence.*;
 
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.time.Instant;
 
 @Entity
@@ -21,7 +23,7 @@ public class Mensagem {
     private Jogador idJogador;
 
     @Column(name = "data_mensagem", nullable = false)
-    private Instant dataMensagem;
+    private Timestamp dataMensagem;
 
     @Column(name = "texto_mensagem", nullable = false, length = 450)
     private String textoMensagem;
@@ -50,11 +52,11 @@ public class Mensagem {
         this.idJogador = idJogador;
     }
 
-    public Instant getDataMensagem() {
+    public Timestamp getDataMensagem() {
         return dataMensagem;
     }
 
-    public void setDataMensagem(Instant dataMensagem) {
+    public void setDataMensagem(Timestamp dataMensagem) {
         this.dataMensagem = dataMensagem;
     }
 

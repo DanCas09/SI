@@ -3,6 +3,7 @@ package model;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.time.Instant;
 
 @Entity
@@ -25,7 +26,7 @@ public class Compra {
     private BigDecimal preco;
 
     @Column(name = "data_compra", nullable = false)
-    private Instant dataCompra;
+    private Timestamp dataCompra;
 
     public Integer getId() {
         return id;
@@ -59,11 +60,11 @@ public class Compra {
         this.preco = preco;
     }
 
-    public Instant getDataCompra() {
+    public Timestamp getDataCompra() {
         return dataCompra;
     }
 
-    public void setDataCompra(Instant dataCompra) {
+    public void setDataCompra(Timestamp dataCompra) {
         this.dataCompra = dataCompra;
     }
 

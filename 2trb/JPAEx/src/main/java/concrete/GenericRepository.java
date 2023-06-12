@@ -4,6 +4,7 @@ import concrete.interfaces.IMapper;
 import concrete.interfaces.IRepository;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.LockModeType;
 import scopes.DataScope;
 
 import java.lang.reflect.Method;
@@ -26,7 +27,7 @@ public class GenericRepository<Tentity, Tkey> implements IRepository<Tentity, Tk
         try (DataScope ds = new DataScope()) {
             EntityManager em = ds.getEntityManager();
             String entityName = entityClass.getSimpleName();
-            List<Tentity> l = em.createQuery("select e from " + entityName + " e", entityClass)
+            List<Tentity> l = em.createQuery("select e from " + entityName + " e", entityClass).setLockMode(LockModeType.PESSIMISTIC_READ)
                     .getResultList();
             ds.validateWork();
             return l;

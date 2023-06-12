@@ -1,4 +1,4 @@
-package Tests;
+package tests;
 
 import jakarta.persistence.LockModeType;
 import org.junit.Test;

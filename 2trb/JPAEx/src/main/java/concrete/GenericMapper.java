@@ -2,6 +2,7 @@ package concrete;
 
 import concrete.interfaces.IMapper;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.LockModeType;
 import scopes.DataScope;
 
 import java.lang.reflect.Method;
@@ -36,7 +37,7 @@ public class GenericMapper<T, TId> implements IMapper<T, TId> {
         try (DataScope ds = new DataScope()) {
             EntityManager em = ds.getEntityManager();
             ds.validateWork();
-            return em.find(entityClass, id);
+            return em.find(entityClass, id, LockModeType.PESSIMISTIC_READ);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             throw e;
@@ -75,7 +76,7 @@ public class GenericMapper<T, TId> implements IMapper<T, TId> {
     public void refresh(T cracha) throws Exception {
         try (DataScope ds = new DataScope()) {
             EntityManager em = ds.getEntityManager();
-            em.refresh(cracha);
+            em.refresh(cracha, LockModeType.PESSIMISTIC_WRITE);
             ds.validateWork();
         } catch (Exception e) {
             System.out.println(e.getMessage());
